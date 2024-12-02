@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: stomp-status-ping
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+app:
+  websocket:
+    stomp:
+      server:
+        endpoints: "/stomp"
+        application-destination-prefixes: "/app"
+        broker-destination-prefixes: "/topic"
+        principal-header: "principal"
+
+logging:
+  level:
+    root: info
