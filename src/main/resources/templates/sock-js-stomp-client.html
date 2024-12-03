@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Application</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<div id="chat-page">
+    <div id="message-area"></div>
+    <input type="text" id="message-input" placeholder="Type a message...">
+    <button onclick="sendMessage()">Send</button>
+</div>
+<script>
+    var stompClient = null;
+    var username = prompt('Enter your name:');
+
+    function connect() {
+        var socket = new SockJS('http://localhost:8080/stomp', null, {
+            transports: ['xhr-streaming'],
+            withCredentials: true
+        });
+        stompClient = Stomp.over(socket);
+        var headers = {}
+        headers["simpUser"] = username
+        stompClient.connect(headers, onConnected, onError);
+    }
+
+    function onConnected() {
+        console.log("Connected")
+        stompClient.subscribe('/room/1');
+
+    }
+
+    function onError(error) {
+        console.log('Error: ' + error);
+    }
+
+    connect();
+</script>
+</body>
+</html>

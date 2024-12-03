@@ -16,4 +16,5 @@ public class StompWebSocketProperties {
     String[] brokerDestinationPrefixes;
     String[] origins;
     String principalHeader;
+    String principalCookie;
 }

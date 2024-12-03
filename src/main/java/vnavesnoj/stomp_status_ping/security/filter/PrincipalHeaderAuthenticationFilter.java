@@ -28,9 +28,7 @@ public class PrincipalHeaderAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, ServletException {
         final var principal = request.getHeader(principalHeader);
-        if (principal == null || principal.isBlank()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect principal");
-        } else {
+        if (principal != null && !principal.isBlank()) {
             final var user = new User(
                     principal,
                     "",
@@ -39,7 +37,8 @@ public class PrincipalHeaderAuthenticationFilter extends OncePerRequestFilter {
             final var authentication =
                     new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            filterChain.doFilter(request, response);
         }
+        filterChain.doFilter(request, response);
+//            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect principal");
     }
 }

@@ -20,7 +20,8 @@ app:
         endpoints: "/stomp"
         application-destination-prefixes: "/app"
         broker-destination-prefixes: "/topic"
-        principal-header: "principal"
+        principal-header: "Principal"
+        principal-cookie: "principal"
 
 
 server:
@@ -30,4 +31,4 @@ server:
 
 logging:
   level:
-    root: info
+    root: debug

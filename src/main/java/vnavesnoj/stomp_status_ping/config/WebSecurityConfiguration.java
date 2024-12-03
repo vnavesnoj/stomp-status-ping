@@ -2,6 +2,7 @@ package vnavesnoj.stomp_status_ping.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -12,11 +13,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import vnavesnoj.stomp_status_ping.security.filter.PrincipalHeaderAuthenticationFilter;
+import vnavesnoj.stomp_status_ping.security.filter.PrincipalCookieAuthenticationFilter;
 
 import java.util.Arrays;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 /**
  * @author vnavesnoj
@@ -38,11 +37,13 @@ public class WebSecurityConfiguration {
                         .requestMatchers(Arrays.stream(stompProperties.getEndpoints())
                                 .map(endpoint -> endpoint + "/**")
                                 .toArray(String[]::new)).authenticated()
+                        .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/test/**").permitAll()
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 )
-                .cors(withDefaults())
                 .exceptionHandling(item -> item.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .addFilterBefore(
-                        new PrincipalHeaderAuthenticationFilter(stompProperties.getPrincipalHeader()),
+                        new PrincipalCookieAuthenticationFilter(stompProperties.getPrincipalCookie()),
                         UsernamePasswordAuthenticationFilter.class
                 )
                 .build();

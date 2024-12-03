@@ -1,11 +1,18 @@
 package vnavesnoj.stomp_status_ping.config;
 
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisIndexedHttpSession;
+import org.springframework.session.web.context.AbstractHttpSessionApplicationInitializer;
 
 /**
  * @author vnavesnoj
  * @mail vnavesnoj@gmail.com
  */
-@EnableRedisIndexedHttpSession
-public class RedisSessionConfiguration {
+//@Configuration
+//@EnableRedisIndexedHttpSession
+//@EnableRedisRepositories
+public class RedisSessionConfiguration extends AbstractHttpSessionApplicationInitializer {
+
+//    @Bean
+//    public LettuceConnectionFactory redisConnectionFactory() {
+//        return new LettuceConnectionFactory();
+//    }
 }

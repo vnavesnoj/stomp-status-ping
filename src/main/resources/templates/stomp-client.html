@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Application</title>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+</head>
+<body>
+<div id="chat-page">
+    <div id="message-area"></div>
+    <input type="text" id="message-input" placeholder="Type a message...">
+    <button onclick="sendMessage()">Send</button>
+</div>
+<script>
+    var stompClient = null;
+    var username = prompt('Enter your name:');
+
+    function connect() {
+        client = new StompJs.Client({
+            brokerURL: 'ws://localhost:8080/stomp',
+            connectHeaders: {
+                'Principal': username
+            },
+            onConnect: (frame) => {
+                console.log('Connected: ' + frame);
+                addMessage('Connected to WebSocket');
+                client.subscribe('/room/1', (message) => {
+                    addMessage('Received: ' + message.body);
+                });
+                connectBtn.disabled = true;
+                disconnectBtn.disabled = false;
+                sendBtn.disabled = false;
+            },
+            onDisconnect: () => {
+                addMessage('Disconnected from WebSocket');
+                connectBtn.disabled = false;
+                disconnectBtn.disabled = true;
+                sendBtn.disabled = true;
+            },
+            onStompError: (frame) => {
+                console.error('Broker reported error: ' + frame.headers['message']);
+                console.error('Additional details: ' + frame.body);
+                addMessage('Error: ' + frame.headers['message']);
+            }
+        });
+
+        client.activate();
+    }
+</script>
+</body>
+</html>
