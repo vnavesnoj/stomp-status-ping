@@ -31,7 +31,7 @@ public class WebSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.sessionManagement(item -> item.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        return http.sessionManagement(item -> item.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(item -> item
                         .requestMatchers(Arrays.stream(stompProperties.getEndpoints())

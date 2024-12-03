@@ -30,7 +30,9 @@ public class StompWebSocketConfiguration extends AbstractSessionWebSocketMessage
 
     @Override
     protected void configureStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint(properties.getEndpoints()).withSockJS();
+        registry.addEndpoint(properties.getEndpoints())
+                .withSockJS()
+                .setHeartbeatTime(properties.getHeartbeatTime());
     }
 
     @Override

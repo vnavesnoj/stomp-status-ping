@@ -18,7 +18,8 @@
     function connect() {
         var socket = new SockJS('http://localhost:8080/stomp', null, {
             transports: ['xhr-streaming'],
-            withCredentials: true
+            withCredentials: true,
+            heartbeat: 5000
         });
         stompClient = Stomp.over(socket);
         var headers = {}

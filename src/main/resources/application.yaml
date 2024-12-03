@@ -22,6 +22,7 @@ app:
         broker-destination-prefixes: "/topic"
         principal-header: "Principal"
         principal-cookie: "principal"
+        heartbeat-time: 25000
 
 
 server:
