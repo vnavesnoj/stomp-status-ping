@@ -22,6 +22,8 @@ public class ActiveWsUserSession {
 
     Long connectionTime;
 
+    //TODO Long lastAccessedTime;
+
     @TimeToLive
     Long ttl;
 
