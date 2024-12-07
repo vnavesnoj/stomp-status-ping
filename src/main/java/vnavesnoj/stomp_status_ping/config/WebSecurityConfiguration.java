@@ -31,7 +31,7 @@ public class WebSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.sessionManagement(item -> item.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+        return http.sessionManagement(item -> item.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(item -> item
                         .requestMatchers(Arrays.stream(stompProperties.getEndpoints())
@@ -39,6 +39,7 @@ public class WebSecurityConfiguration {
                                 .toArray(String[]::new)).authenticated()
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/test/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 )
                 .exceptionHandling(item -> item.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))

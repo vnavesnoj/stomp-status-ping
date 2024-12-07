@@ -9,6 +9,7 @@ spring:
     redis:
       flush-mode: on_save
       namespace: spring:session
+      repository-type: indexed
   docker:
     compose:
       file: classpath:/docker-compose.yaml
@@ -32,4 +33,4 @@ server:
 
 logging:
   level:
-    root: debug
+    root: info

@@ -7,5 +7,5 @@ import org.springframework.boot.test.context.TestConfiguration;
  * @mail vnavesnoj@gmail.com
  */
 @TestConfiguration
-public class RedisConfiguration {
+public class TestRedisConfiguration {
 }

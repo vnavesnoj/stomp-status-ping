@@ -9,10 +9,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.session.Session;
-import org.springframework.session.web.socket.config.annotation.AbstractSessionWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import vnavesnoj.stomp_status_ping.interceptor.NoopChannelInterceptor;
 
 /**
@@ -24,12 +23,12 @@ import vnavesnoj.stomp_status_ping.interceptor.NoopChannelInterceptor;
 @EnableScheduling
 @EnableConfigurationProperties(StompWebSocketProperties.class)
 @EnableWebSocketMessageBroker
-public class StompWebSocketConfiguration extends AbstractSessionWebSocketMessageBrokerConfigurer<Session> {
+public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
 
     private final StompWebSocketProperties properties;
 
     @Override
-    protected void configureStompEndpoints(StompEndpointRegistry registry) {
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint(properties.getEndpoints())
                 .withSockJS()
                 .setHeartbeatTime(properties.getHeartbeatTime());
