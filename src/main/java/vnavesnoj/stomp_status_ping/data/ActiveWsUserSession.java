@@ -22,23 +22,25 @@ public class ActiveWsUserSession {
 
     Long connectionTime;
 
-    //TODO Long lastAccessedTime;
+    Long lastAccessedTime;
 
     @TimeToLive
     Long ttl;
 
-    private ActiveWsUserSession(String id, String username, Long connectionTime, Long ttl) {
+    private ActiveWsUserSession(String id, String username, Long connectionTime, Long lastAccessedTime, Long ttl) {
         this.id = id;
         this.username = username;
         this.connectionTime = connectionTime;
+        this.lastAccessedTime = lastAccessedTime;
         this.ttl = ttl;
     }
 
-    public static ActiveWsUserSession of(String username, String sessionId, Long connectionTime, Long ttl) {
+    public static ActiveWsUserSession of(String username, String sessionId, Long connectionTime, Long lastAccessedTime, Long ttl) {
         return new ActiveWsUserSession(
                 username + "." + sessionId,
                 username,
                 connectionTime,
+                lastAccessedTime,
                 ttl
         );
     }

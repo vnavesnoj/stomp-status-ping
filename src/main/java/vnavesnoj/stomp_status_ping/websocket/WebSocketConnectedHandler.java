@@ -40,6 +40,7 @@ public class WebSocketConnectedHandler implements ApplicationListener<SessionCon
                 event.getUser().getName(),
                 SimpMessageHeaderAccessor.getSessionId(event.getMessage().getHeaders()),
                 Instant.now().getEpochSecond(),
+                Instant.now().getEpochSecond(),
                 60L
         );
         repository.save(session);
