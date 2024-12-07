@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisKeyValueAdapter;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
 /**
@@ -12,7 +13,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
  */
 @RequiredArgsConstructor
 @Configuration
-@EnableRedisRepositories(basePackages = "vnavesnoj.stomp_status_ping.data")
+@EnableRedisRepositories(basePackages = "vnavesnoj.stomp_status_ping.data", enableKeyspaceEvents = RedisKeyValueAdapter.EnableKeyspaceEvents.ON_STARTUP)
 public class RedisConfiguration {
 
     @Bean
