@@ -13,8 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.session.FindByIndexNameSessionRepository;
-import org.springframework.session.Session;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.WebSocketSession;
@@ -53,8 +51,6 @@ public class WsConnectionTest {
     private String port;
     @Autowired
     private WebSocketHandler webSocketHandler;
-    @Autowired
-    private FindByIndexNameSessionRepository<? extends Session> repository;
     private SockJsClient sockJsClient;
 
 

@@ -23,14 +23,15 @@
         });
         stompClient = Stomp.over(socket);
         var headers = {}
-        headers["simpUser"] = username
         stompClient.connect(headers, onConnected, onError);
     }
 
     function onConnected() {
         console.log("Connected")
-        stompClient.subscribe('/room/1');
-
+        var headers = {id: username}
+        stompClient.subscribe('/topic/status', function (message) {
+            console.log('Received message: ' + message.body);
+        }, headers);
     }
 
     function onError(error) {
