@@ -2,9 +2,11 @@ package vnavesnoj.stomp_status_ping.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import vnavesnoj.stomp_status_ping.data.ActiveWsSession;
 import vnavesnoj.stomp_status_ping.data.ActiveWsSessionRepository;
 import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionCreateDto;
 import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionReadDto;
+import vnavesnoj.stomp_status_ping.mapper.Mapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +20,14 @@ import java.util.Optional;
 public class ActiveWsSessionServiceImpl implements ActiveWsSessionService {
 
     private final ActiveWsSessionRepository repository;
+    private final Mapper<ActiveWsSession, ActiveWsSessionReadDto> readMapper;
+    private final Mapper<ActiveWsSessionCreateDto, ActiveWsSession> createMapper;
 
     @Override
     public Optional<ActiveWsSessionReadDto> findByUsernameAndSessionId(String username, String sessionId) {
-        return Optional.empty();
+        final String id = username + ActiveWsSession.ID_DELIMITER + sessionId;
+        return repository.findById(id)
+                .map(readMapper::map);
     }
 
     @Override
