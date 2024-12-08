@@ -20,6 +20,8 @@ public class ActiveWsSession {
     @Indexed
     String username;
 
+    String sessionId;
+
     Long connectionTime;
 
     Long lastAccessedTime;
@@ -27,9 +29,12 @@ public class ActiveWsSession {
     @TimeToLive
     Long ttl;
 
-    private ActiveWsSession(String id, String username, Long connectionTime, Long lastAccessedTime, Long ttl) {
+    public final static String ID_DELIMITER = ".";
+
+    private ActiveWsSession(String id, String username, String sessionId, Long connectionTime, Long lastAccessedTime, Long ttl) {
         this.id = id;
         this.username = username;
+        this.sessionId = sessionId;
         this.connectionTime = connectionTime;
         this.lastAccessedTime = lastAccessedTime;
         this.ttl = ttl;
@@ -37,8 +42,9 @@ public class ActiveWsSession {
 
     public static ActiveWsSession of(String username, String sessionId, Long connectionTime, Long lastAccessedTime, Long ttl) {
         return new ActiveWsSession(
-                username + "." + sessionId,
+                username + ID_DELIMITER + sessionId,
                 username,
+                sessionId,
                 connectionTime,
                 lastAccessedTime,
                 ttl
