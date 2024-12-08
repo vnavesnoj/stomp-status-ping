@@ -32,7 +32,9 @@ public class ActiveWsSessionServiceImpl implements ActiveWsSessionService {
 
     @Override
     public List<ActiveWsSessionReadDto> findAllByUsername(String username) {
-        return null;
+        return repository.findAllByUsername(username).stream()
+                .map(readMapper::map)
+                .toList();
     }
 
     @Override
