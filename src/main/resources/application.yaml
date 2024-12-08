@@ -24,6 +24,10 @@ app:
         principal-header: "Principal"
         principal-cookie: "principal"
         heartbeat-time: 25000
+  redis:
+    entity:
+      active-ws-session:
+        ttl: 60
 
 
 server:
