@@ -39,7 +39,11 @@ public class ActiveWsSessionServiceImpl implements ActiveWsSessionService {
 
     @Override
     public ActiveWsSessionReadDto create(ActiveWsSessionCreateDto session) {
-        return null;
+        return Optional.ofNullable(session)
+                .map(createMapper::map)
+                .map(repository::save)
+                .map(readMapper::map)
+                .orElseThrow(NullPointerException::new);
     }
 
     @Override
