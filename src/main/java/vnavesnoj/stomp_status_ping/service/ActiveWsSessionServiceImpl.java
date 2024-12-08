@@ -70,7 +70,12 @@ public class ActiveWsSessionServiceImpl implements ActiveWsSessionService {
 
     @Override
     public boolean delete(String username, String sessionId) {
-        return false;
+        return repository.findById(getId(username, sessionId))
+                .map(item -> {
+                    repository.delete(item);
+                    return true;
+                })
+                .orElse(false);
     }
 
     private String getId(String username, String sessionId) {
