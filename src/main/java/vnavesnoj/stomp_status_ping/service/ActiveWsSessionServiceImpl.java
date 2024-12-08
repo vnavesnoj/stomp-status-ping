@@ -1,6 +1,7 @@
 package vnavesnoj.stomp_status_ping.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vnavesnoj.stomp_status_ping.config.ActiveWsSessionEntityProperties;
 import vnavesnoj.stomp_status_ping.data.ActiveWsSession;
 import vnavesnoj.stomp_status_ping.data.ActiveWsSessionRepository;
@@ -16,6 +17,7 @@ import java.util.Optional;
  * @author vnavesnoj
  * @mail vnavesnoj@gmail.com
  */
+@Transactional(readOnly = true)
 @Service
 public class ActiveWsSessionServiceImpl implements ActiveWsSessionService {
 
@@ -47,6 +49,7 @@ public class ActiveWsSessionServiceImpl implements ActiveWsSessionService {
                 .toList();
     }
 
+    @Transactional
     @Override
     public ActiveWsSessionReadDto create(ActiveWsSessionCreateDto session) {
         return Optional.ofNullable(session)
@@ -56,6 +59,7 @@ public class ActiveWsSessionServiceImpl implements ActiveWsSessionService {
                 .orElseThrow(NullPointerException::new);
     }
 
+    @Transactional
     @Override
     public Optional<ActiveWsSessionReadDto> updateLastAccessedTime(String username, String sessionId) {
         return repository.findById(getId(username, sessionId))
@@ -68,6 +72,7 @@ public class ActiveWsSessionServiceImpl implements ActiveWsSessionService {
                 .map(readMapper::map);
     }
 
+    @Transactional
     @Override
     public boolean delete(String username, String sessionId) {
         return repository.findById(getId(username, sessionId))
