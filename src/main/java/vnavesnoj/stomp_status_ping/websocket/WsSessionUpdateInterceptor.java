@@ -5,7 +5,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
-import vnavesnoj.stomp_status_ping.data.ActiveWsUserSessionRepository;
+import vnavesnoj.stomp_status_ping.data.ActiveWsSessionRepository;
 
 import java.time.Instant;
 
@@ -18,7 +18,7 @@ import static org.springframework.messaging.simp.SimpMessageType.*;
 @RequiredArgsConstructor
 public class WsSessionUpdateInterceptor implements ChannelInterceptor {
 
-    private final ActiveWsUserSessionRepository repository;
+    private final ActiveWsSessionRepository repository;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {

@@ -8,7 +8,7 @@ import java.util.List;
  * @author vnavesnoj
  * @mail vnavesnoj@gmail.com
  */
-public interface ActiveWsUserSessionRepository extends CrudRepository<ActiveWsUserSession, String> {
+public interface ActiveWsSessionRepository extends CrudRepository<ActiveWsSession, String> {
 
-    List<ActiveWsUserSession> findAllByUsername(String username);
+    List<ActiveWsSession> findAllByUsername(String username);
 }

@@ -7,8 +7,8 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
-import vnavesnoj.stomp_status_ping.data.ActiveWsUserSession;
-import vnavesnoj.stomp_status_ping.data.ActiveWsUserSessionRepository;
+import vnavesnoj.stomp_status_ping.data.ActiveWsSession;
+import vnavesnoj.stomp_status_ping.data.ActiveWsSessionRepository;
 import vnavesnoj.stomp_status_ping.websocket.payload.UserStatus;
 import vnavesnoj.stomp_status_ping.websocket.payload.UserStatusPayload;
 
@@ -24,7 +24,7 @@ import java.util.Map;
 @Component
 public class WebSocketConnectedHandler implements ApplicationListener<SessionConnectedEvent> {
 
-    private final ActiveWsUserSessionRepository repository;
+    private final ActiveWsSessionRepository repository;
     private final SimpMessagingTemplate template;
 
     @Override
@@ -36,7 +36,7 @@ public class WebSocketConnectedHandler implements ApplicationListener<SessionCon
             final var payload = new UserStatusPayload(user, UserStatus.ONLINE);
             template.convertAndSend("/topic/status", payload, headers);
         }
-        final var session = ActiveWsUserSession.of(
+        final var session = ActiveWsSession.of(
                 event.getUser().getName(),
                 SimpMessageHeaderAccessor.getSessionId(event.getMessage().getHeaders()),
                 Instant.now().getEpochSecond(),

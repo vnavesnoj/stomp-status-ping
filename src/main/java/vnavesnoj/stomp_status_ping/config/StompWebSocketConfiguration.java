@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-import vnavesnoj.stomp_status_ping.data.ActiveWsUserSessionRepository;
+import vnavesnoj.stomp_status_ping.data.ActiveWsSessionRepository;
 import vnavesnoj.stomp_status_ping.interceptor.NoopChannelInterceptor;
 import vnavesnoj.stomp_status_ping.websocket.WsSessionUpdateInterceptor;
 
@@ -29,11 +29,11 @@ import vnavesnoj.stomp_status_ping.websocket.WsSessionUpdateInterceptor;
 public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
 
     private final StompWebSocketProperties properties;
-    private final ActiveWsUserSessionRepository repository;
+    private final ActiveWsSessionRepository repository;
     private final TaskScheduler messageBrokerTaskScheduler;
 
     public StompWebSocketConfiguration(StompWebSocketProperties properties,
-                                       ActiveWsUserSessionRepository repository,
+                                       ActiveWsSessionRepository repository,
                                        @Lazy TaskScheduler messageBrokerTaskScheduler) {
         this.properties = properties;
         this.repository = repository;

@@ -12,7 +12,7 @@ import org.springframework.data.redis.core.index.Indexed;
  */
 @Data
 @RedisHash("session")
-public class ActiveWsUserSession {
+public class ActiveWsSession {
 
     @Id
     String id;
@@ -27,7 +27,7 @@ public class ActiveWsUserSession {
     @TimeToLive
     Long ttl;
 
-    private ActiveWsUserSession(String id, String username, Long connectionTime, Long lastAccessedTime, Long ttl) {
+    private ActiveWsSession(String id, String username, Long connectionTime, Long lastAccessedTime, Long ttl) {
         this.id = id;
         this.username = username;
         this.connectionTime = connectionTime;
@@ -35,8 +35,8 @@ public class ActiveWsUserSession {
         this.ttl = ttl;
     }
 
-    public static ActiveWsUserSession of(String username, String sessionId, Long connectionTime, Long lastAccessedTime, Long ttl) {
-        return new ActiveWsUserSession(
+    public static ActiveWsSession of(String username, String sessionId, Long connectionTime, Long lastAccessedTime, Long ttl) {
+        return new ActiveWsSession(
                 username + "." + sessionId,
                 username,
                 connectionTime,
