@@ -46,7 +46,8 @@ public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfig
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint(wsProperties.getEndpoints())
-                .withSockJS();
+                .withSockJS()
+                .setHeartbeatTime(wsProperties.getServerHeartbeat());
     }
 
     @Override

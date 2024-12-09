@@ -17,6 +17,6 @@ public class RedisKeyExpiredHandler implements ApplicationListener<RedisKeyExpir
 
     @Override
     public void onApplicationEvent(RedisKeyExpiredEvent<?> event) {
-        log.info("Session expired");
+        //TODO close WebSocketSession
     }
 }

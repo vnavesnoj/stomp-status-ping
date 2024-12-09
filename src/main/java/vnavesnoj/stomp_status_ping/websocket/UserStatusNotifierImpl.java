@@ -29,8 +29,8 @@ public class UserStatusNotifierImpl implements UserStatusNotifier {
     @Override
     public void sendToSubscribers(String username, UserStatus status, Long timestamp) {
         final Map<String, Object> headers = Map.of("subscription", username);
-        final var payload = new UserStatusPayload(username, UserStatus.ONLINE, timestamp);
+        final var payload = new UserStatusPayload(username, status, timestamp);
         template.convertAndSend(userStatusBrokerDestination, payload, headers);
-        log.info("Send status of the user %s to subscribers".formatted(username));
+        log.info("Send status %s of the user %s to subscribers".formatted(status, username));
     }
 }

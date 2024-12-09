@@ -93,8 +93,11 @@ public class ActiveWsSessionServiceImpl implements ActiveWsSessionService {
                     return item;
                 })
                 .map(readMapper::map)
-                .map(item -> new ActiveWsSessionDeletedDto(item,
-                        repository.countActiveWsSessionByUsername(username) < 1)
+                .map(item ->
+                        {
+                            final var sessions = repository.findAllByUsername(username);
+                            return new ActiveWsSessionDeletedDto(item, sessions == null || sessions.isEmpty());
+                        }
                 );
     }
 
