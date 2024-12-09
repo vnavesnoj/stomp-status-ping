@@ -1,4 +1,4 @@
-package vnavesnoj.stomp_status_ping.interceptor;
+package vnavesnoj.stomp_status_ping.websocket;
 
 import org.springframework.messaging.support.ChannelInterceptor;
 

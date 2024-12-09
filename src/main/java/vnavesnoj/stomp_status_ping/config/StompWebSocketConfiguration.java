@@ -16,7 +16,7 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import vnavesnoj.stomp_status_ping.config.properties.BrokerDestinationProperties;
 import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
-import vnavesnoj.stomp_status_ping.interceptor.NoopChannelInterceptor;
+import vnavesnoj.stomp_status_ping.websocket.NoopChannelInterceptor;
 
 /**
  * @author vnavesnoj

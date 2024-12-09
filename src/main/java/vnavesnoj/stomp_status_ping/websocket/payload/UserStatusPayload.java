@@ -12,4 +12,6 @@ public class UserStatusPayload {
     String username;
 
     UserStatus status;
+
+    Long timestamp;
 }
