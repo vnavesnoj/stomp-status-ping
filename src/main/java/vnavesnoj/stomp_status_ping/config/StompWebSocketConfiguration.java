@@ -16,9 +16,7 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import vnavesnoj.stomp_status_ping.config.properties.BrokerDestinationProperties;
 import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
-import vnavesnoj.stomp_status_ping.data.ActiveWsSessionRepository;
 import vnavesnoj.stomp_status_ping.interceptor.NoopChannelInterceptor;
-import vnavesnoj.stomp_status_ping.websocket.WsSessionUpdateInterceptor;
 
 /**
  * @author vnavesnoj
@@ -32,24 +30,23 @@ public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfig
 
     private final StompWebSocketProperties wsProperties;
     private final BrokerDestinationProperties brokerProperties;
-    private final ActiveWsSessionRepository repository;
+    private final ChannelInterceptor wsSessionUpdateInterceptor;
     private final TaskScheduler messageBrokerTaskScheduler;
 
     public StompWebSocketConfiguration(StompWebSocketProperties wsProperties,
                                        BrokerDestinationProperties brokerProperties,
-                                       ActiveWsSessionRepository repository,
+                                       ChannelInterceptor wsSessionUpdateInterceptor,
                                        @Lazy TaskScheduler messageBrokerTaskScheduler) {
         this.wsProperties = wsProperties;
         this.brokerProperties = brokerProperties;
-        this.repository = repository;
+        this.wsSessionUpdateInterceptor = wsSessionUpdateInterceptor;
         this.messageBrokerTaskScheduler = messageBrokerTaskScheduler;
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint(wsProperties.getEndpoints())
-                .withSockJS()
-                .setHeartbeatTime(wsProperties.getServerHeartbeat());
+                .withSockJS();
     }
 
     @Override
@@ -62,7 +59,7 @@ public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfig
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new WsSessionUpdateInterceptor(repository));
+        registration.interceptors(wsSessionUpdateInterceptor);
         WebSocketMessageBrokerConfigurer.super.configureClientInboundChannel(registration);
     }
 
