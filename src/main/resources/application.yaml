@@ -20,11 +20,13 @@ app:
       server:
         endpoints: "/stomp"
         origins: "*"
-        application-destination-prefix: "/app"
         principal-header: "Principal"
         principal-cookie: "principal"
         server-heartbeat: 10000
         client-heartbeat: 10000
+        destination:
+          prefix: "/app"
+          current-user-status: "/current-status"
       broker:
         destination:
           prefix: "/topic"

@@ -13,7 +13,6 @@ public class StompWebSocketProperties {
 
     String[] endpoints;
     String[] origins;
-    String applicationDestinationPrefix;
     String principalHeader;
     String principalCookie;
     Long serverHeartbeat;

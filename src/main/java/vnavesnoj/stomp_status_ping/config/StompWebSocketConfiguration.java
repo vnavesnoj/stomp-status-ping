@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import vnavesnoj.stomp_status_ping.config.properties.AppStompDestinationProperties;
 import vnavesnoj.stomp_status_ping.config.properties.BrokerDestinationProperties;
 import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
 import vnavesnoj.stomp_status_ping.websocket.NoopChannelInterceptor;
@@ -24,21 +25,28 @@ import vnavesnoj.stomp_status_ping.websocket.NoopChannelInterceptor;
  */
 @Configuration
 @EnableScheduling
-@EnableConfigurationProperties({StompWebSocketProperties.class, BrokerDestinationProperties.class})
+@EnableConfigurationProperties({
+        StompWebSocketProperties.class,
+        BrokerDestinationProperties.class,
+        AppStompDestinationProperties.class
+})
 @EnableWebSocketMessageBroker
 public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
 
     private final StompWebSocketProperties wsProperties;
     private final BrokerDestinationProperties brokerProperties;
+    private final AppStompDestinationProperties appStompProperties;
     private final ChannelInterceptor wsSessionUpdateInterceptor;
     private final TaskScheduler messageBrokerTaskScheduler;
 
     public StompWebSocketConfiguration(StompWebSocketProperties wsProperties,
                                        BrokerDestinationProperties brokerProperties,
+                                       AppStompDestinationProperties appStompProperties,
                                        ChannelInterceptor wsSessionUpdateInterceptor,
                                        @Lazy TaskScheduler messageBrokerTaskScheduler) {
         this.wsProperties = wsProperties;
         this.brokerProperties = brokerProperties;
+        this.appStompProperties = appStompProperties;
         this.wsSessionUpdateInterceptor = wsSessionUpdateInterceptor;
         this.messageBrokerTaskScheduler = messageBrokerTaskScheduler;
     }
@@ -52,7 +60,7 @@ public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfig
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes(wsProperties.getApplicationDestinationPrefix())
+        registry.setApplicationDestinationPrefixes(appStompProperties.getPrefix())
                 .enableSimpleBroker(brokerProperties.getPrefix())
                 .setHeartbeatValue(new long[]{wsProperties.getServerHeartbeat(), wsProperties.getClientHeartbeat()})
                 .setTaskScheduler(messageBrokerTaskScheduler);

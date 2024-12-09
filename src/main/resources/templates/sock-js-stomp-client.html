@@ -9,7 +9,7 @@
 <div id="chat-page">
     <div id="message-area"></div>
     <input type="text" id="message-input" placeholder="Type a message...">
-    <button onclick="sendMessage()">Send</button>
+    <button onclick="topicSubscribe()">Send</button>
 </div>
 <script>
     var stompClient = null;
@@ -18,8 +18,7 @@
     function connect() {
         var socket = new SockJS('http://localhost:8080/stomp', null, {
             transports: ['xhr-streaming'],
-            withCredentials: true,
-            'heart-beat': [5000, 25000]
+            withCredentials: true
         });
         stompClient = Stomp.over(socket);
         var headers = {}
@@ -28,6 +27,13 @@
 
     function onConnected() {
         console.log("Connected")
+        var headers = {id: username}
+        stompClient.subscribe('/app/current-status', function (message) {
+            console.log('Received message: ' + message.body);
+        }, headers);
+    }
+
+    function topicSubscribe() {
         var headers = {id: username}
         stompClient.subscribe('/topic/status', function (message) {
             console.log('Received message: ' + message.body);
