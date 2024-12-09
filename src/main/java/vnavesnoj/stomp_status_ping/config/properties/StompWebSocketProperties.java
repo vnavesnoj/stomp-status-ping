@@ -1,4 +1,4 @@
-package vnavesnoj.stomp_status_ping.config;
+package vnavesnoj.stomp_status_ping.config.properties;
 
 import lombok.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -12,10 +12,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class StompWebSocketProperties {
 
     String[] endpoints;
-    String[] applicationDestinationPrefixes;
-    String[] brokerDestinationPrefixes;
     String[] origins;
+    String applicationDestinationPrefix;
     String principalHeader;
     String principalCookie;
-    Long heartbeatTime;
+    Long serverHeartbeat;
+    Long clientHeartbeat;
 }

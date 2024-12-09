@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import vnavesnoj.stomp_status_ping.config.StompWebSocketProperties;
+import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
 
 /**
  * @author vnavesnoj

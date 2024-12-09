@@ -23,8 +23,8 @@ import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 import org.testcontainers.containers.GenericContainer;
-import vnavesnoj.stomp_status_ping.config.StompWebSocketProperties;
 import vnavesnoj.stomp_status_ping.config.TestRedisConfiguration;
+import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
 
 import java.net.URI;
 import java.net.URISyntaxException;

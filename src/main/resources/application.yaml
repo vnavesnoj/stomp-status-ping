@@ -19,11 +19,17 @@ app:
     stomp:
       server:
         endpoints: "/stomp"
-        application-destination-prefixes: "/app"
-        broker-destination-prefixes: "/topic"
+        origins: "*"
+        application-destination-prefix: "/app"
         principal-header: "Principal"
         principal-cookie: "principal"
-        heartbeat-time: 25000
+        server-heartbeat: 10000
+        client-heartbeat: 10000
+      broker:
+        destination:
+          prefix: "/topic"
+          user-status: "/status"
+
   redis:
     entity:
       active-ws-session:
