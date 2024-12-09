@@ -6,6 +6,7 @@ import vnavesnoj.stomp_status_ping.config.ActiveWsSessionEntityProperties;
 import vnavesnoj.stomp_status_ping.data.ActiveWsSession;
 import vnavesnoj.stomp_status_ping.data.ActiveWsSessionRepository;
 import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionCreateDto;
+import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionDeletedDto;
 import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionReadDto;
 import vnavesnoj.stomp_status_ping.mapper.Mapper;
 
@@ -81,6 +82,20 @@ public class ActiveWsSessionServiceImpl implements ActiveWsSessionService {
                     return true;
                 })
                 .orElse(false);
+    }
+
+    @Transactional
+    @Override
+    public Optional<ActiveWsSessionDeletedDto> deleteWithResponse(String username, String sessionId) {
+        return repository.findById(getId(username, sessionId))
+                .map(item -> {
+                    repository.delete(item);
+                    return item;
+                })
+                .map(readMapper::map)
+                .map(item -> new ActiveWsSessionDeletedDto(item,
+                        repository.countActiveWsSessionByUsername(username) < 1)
+                );
     }
 
     private String getId(String username, String sessionId) {

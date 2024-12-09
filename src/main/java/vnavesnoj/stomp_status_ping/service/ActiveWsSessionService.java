@@ -2,6 +2,7 @@ package vnavesnoj.stomp_status_ping.service;
 
 
 import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionCreateDto;
+import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionDeletedDto;
 import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionReadDto;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface ActiveWsSessionService {
     Optional<ActiveWsSessionReadDto> updateLastAccessedTime(String username, String sessionId);
 
     boolean delete(String username, String sessionId);
+
+    Optional<ActiveWsSessionDeletedDto> deleteWithResponse(String username, String sessionId);
 }

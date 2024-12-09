@@ -11,4 +11,6 @@ import java.util.List;
 public interface ActiveWsSessionRepository extends CrudRepository<ActiveWsSession, String> {
 
     List<ActiveWsSession> findAllByUsername(String username);
+
+    long countActiveWsSessionByUsername(String username);
 }
