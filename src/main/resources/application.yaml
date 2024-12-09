@@ -22,6 +22,7 @@ app:
         origins: "*"
         principal-header: "Principal"
         principal-cookie: "principal"
+        token-cookie: "token"
         server-heartbeat: 10000
         client-heartbeat: 10000
         destination:

@@ -15,6 +15,7 @@ public class StompWebSocketProperties {
     String[] origins;
     String principalHeader;
     String principalCookie;
+    String tokenCookie;
     Long serverHeartbeat;
     Long clientHeartbeat;
 }
