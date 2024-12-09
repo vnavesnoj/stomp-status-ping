@@ -60,7 +60,7 @@ public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfig
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes(appStompProperties.getPrefix())
+        registry.setApplicationDestinationPrefixes(appStompProperties.getPrefix(), brokerProperties.getPrefix())
                 .enableSimpleBroker(brokerProperties.getPrefix())
                 .setHeartbeatValue(new long[]{wsProperties.getServerHeartbeat(), wsProperties.getClientHeartbeat()})
                 .setTaskScheduler(messageBrokerTaskScheduler);

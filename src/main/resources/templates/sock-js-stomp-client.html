@@ -28,13 +28,13 @@
     function onConnected() {
         console.log("Connected")
         var headers = {id: username}
-        stompClient.subscribe('/app/current-status', function (message) {
+        stompClient.subscribe('/topic/status', function (message) {
             console.log('Received message: ' + message.body);
         }, headers);
     }
 
     function topicSubscribe() {
-        var headers = {id: username}
+        var headers = {id: document.getElementById("message-input").value}
         stompClient.subscribe('/topic/status', function (message) {
             console.log('Received message: ' + message.body);
         }, headers);

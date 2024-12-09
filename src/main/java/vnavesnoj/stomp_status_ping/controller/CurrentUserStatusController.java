@@ -5,6 +5,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import vnavesnoj.stomp_status_ping.config.properties.AppStompDestinationProperties;
+import vnavesnoj.stomp_status_ping.config.properties.BrokerDestinationProperties;
 import vnavesnoj.stomp_status_ping.service.ActiveWsSessionService;
 import vnavesnoj.stomp_status_ping.websocket.payload.UserStatus;
 import vnavesnoj.stomp_status_ping.websocket.payload.UserStatusPayload;
@@ -22,12 +23,15 @@ import static java.util.function.Predicate.not;
 @Controller
 public class CurrentUserStatusController {
 
-    private final String userStatusTopic;
+    private final String appUserStatusTopic;
+    private final String brokerUserStatusTopic;
     private final ActiveWsSessionService service;
 
-    public CurrentUserStatusController(AppStompDestinationProperties properties,
+    public CurrentUserStatusController(AppStompDestinationProperties appStompProperties,
+                                       BrokerDestinationProperties brokerProperties,
                                        ActiveWsSessionService service) {
-        this.userStatusTopic = properties.getPrefix() + properties.getCurrentUserStatus();
+        this.appUserStatusTopic = appStompProperties.getPrefix() + appStompProperties.getCurrentUserStatus();
+        this.brokerUserStatusTopic = brokerProperties.getPrefix() + brokerProperties.getUserStatus();
         this.service = service;
     }
 
@@ -35,7 +39,7 @@ public class CurrentUserStatusController {
     @SubscribeMapping("/*")
     public Object handle(@Header("destination") String destination,
                          @Header("id") String id) {
-        if (destination.equals(userStatusTopic)) {
+        if (destination.equals(appUserStatusTopic) || destination.equals(brokerUserStatusTopic)) {
             return currentUserStatus(id);
         } else {
             return null;
