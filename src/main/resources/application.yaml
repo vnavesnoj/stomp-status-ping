@@ -35,6 +35,8 @@ app:
         destination:
           prefix: "/topic"
           user-status: "/status"
+      auth:
+        username-header: "Username"
   webclient:
     auth:
       write-timeout: 3000

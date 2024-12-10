@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import vnavesnoj.stomp_status_ping.config.properties.CredentialProperties;
+import vnavesnoj.stomp_status_ping.config.properties.HttpCredentialProperties;
 
 /**
  * @author vnavesnoj
@@ -17,7 +17,7 @@ import vnavesnoj.stomp_status_ping.config.properties.CredentialProperties;
 @RequestMapping("/test")
 public class TestSockJsClientController {
 
-    private final CredentialProperties properties;
+    private final HttpCredentialProperties properties;
 
     @RequestMapping ("/sock-js-client/local-auth")
     public String sockJsClientLocalAuth(@Param("principal") String principal, HttpServletResponse response) {

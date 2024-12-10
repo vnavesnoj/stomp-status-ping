@@ -13,10 +13,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @mail vnavesnoj@gmail.com
  */
 @Value
-@ConfigurationProperties("app.http.auth")
-public class CredentialProperties {
+@ConfigurationProperties("app.websocket.stomp.auth")
+public class WsCredentialProperties {
 
-    String principalHeader;
-    String principalCookie;
-    String tokenCookie;
+    String usernameHeader;
 }

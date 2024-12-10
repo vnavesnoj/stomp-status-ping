@@ -24,7 +24,7 @@ import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 import org.testcontainers.containers.GenericContainer;
 import vnavesnoj.stomp_status_ping.config.TestRedisConfiguration;
-import vnavesnoj.stomp_status_ping.config.properties.CredentialProperties;
+import vnavesnoj.stomp_status_ping.config.properties.HttpCredentialProperties;
 import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
 
 import java.net.URI;
@@ -49,7 +49,7 @@ public class WsConnectionTest {
     @Autowired
     private StompWebSocketProperties properties;
     @Autowired
-    private CredentialProperties credentialProperties;
+    private HttpCredentialProperties credentialProperties;
     @Value("${local.server.port}")
     private String port;
     @Autowired

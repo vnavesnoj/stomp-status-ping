@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import vnavesnoj.stomp_status_ping.config.properties.CredentialProperties;
+import vnavesnoj.stomp_status_ping.config.properties.HttpCredentialProperties;
 import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
 
 import java.util.Arrays;
@@ -25,7 +25,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
-@EnableConfigurationProperties(CredentialProperties.class)
+@EnableConfigurationProperties(HttpCredentialProperties.class)
 @ConditionalOnProperty(value = "app.security.web.enable", havingValue = "true", matchIfMissing = true)
 public class WebSecurityConfiguration {
 
