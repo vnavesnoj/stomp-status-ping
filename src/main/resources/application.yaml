@@ -40,6 +40,7 @@ app:
       base-url: http://localhost:8082
       auth-path: /auth/chatAuth
       auth-response-timeout: 5000
+      token-header: "Authorization"
 
   redis:
     entity:

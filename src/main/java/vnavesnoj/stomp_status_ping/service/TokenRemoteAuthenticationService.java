@@ -21,12 +21,14 @@ public class TokenRemoteAuthenticationService implements TokenAuthenticationServ
     private final WebClient authWebClient;
     private final String authPath;
     private final long authResponseTimeout;
+    private final String tokenHeader;
 
     public TokenRemoteAuthenticationService(WebClient authWebClient,
                                             AuthWebClientProperties properties) {
         this.authWebClient = authWebClient;
         this.authPath = properties.getAuthPath();
         this.authResponseTimeout = properties.getAuthResponseTimeout();
+        this.tokenHeader = properties.getTokenHeader();
     }
 
 
@@ -34,6 +36,7 @@ public class TokenRemoteAuthenticationService implements TokenAuthenticationServ
     public AuthenticationResult getByToken(String token) {
         final var authResponse = authWebClient.get()
                 .uri(uriBuilder -> uriBuilder.path(authPath).build())
+                .header(tokenHeader, token)
                 .retrieve()
                 .bodyToFlux(AuthResponse.class)
                 //TODO optimize
