@@ -1,4 +1,4 @@
-package vnavesnoj.stomp_status_ping.config;
+package vnavesnoj.stomp_status_ping.config.properties;
 
 import lombok.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;

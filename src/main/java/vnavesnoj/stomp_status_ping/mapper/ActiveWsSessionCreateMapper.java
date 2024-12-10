@@ -1,7 +1,7 @@
 package vnavesnoj.stomp_status_ping.mapper;
 
 import org.springframework.stereotype.Component;
-import vnavesnoj.stomp_status_ping.config.ActiveWsSessionEntityProperties;
+import vnavesnoj.stomp_status_ping.config.properties.ActiveWsSessionEntityProperties;
 import vnavesnoj.stomp_status_ping.data.ActiveWsSession;
 import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionCreateDto;
 

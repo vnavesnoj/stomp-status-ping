@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisKeyValueAdapter;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+import vnavesnoj.stomp_status_ping.config.properties.ActiveWsSessionEntityProperties;
 
 /**
  * @author vnavesnoj

@@ -2,7 +2,7 @@ package vnavesnoj.stomp_status_ping.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vnavesnoj.stomp_status_ping.config.ActiveWsSessionEntityProperties;
+import vnavesnoj.stomp_status_ping.config.properties.ActiveWsSessionEntityProperties;
 import vnavesnoj.stomp_status_ping.data.ActiveWsSession;
 import vnavesnoj.stomp_status_ping.data.ActiveWsSessionRepository;
 import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionCreateDto;
