@@ -21,16 +21,12 @@
             withCredentials: true
         });
         stompClient = Stomp.over(socket);
-        var headers = {}
+        var headers = {Username: username}
         stompClient.connect(headers, onConnected, onError);
     }
 
     function onConnected() {
         console.log("Connected")
-        var headers = {id: username}
-        stompClient.subscribe('/topic/status', function (message) {
-            console.log('Received message: ' + message.body);
-        }, headers);
     }
 
     function topicSubscribe() {
