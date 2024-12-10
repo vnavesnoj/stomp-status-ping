@@ -32,6 +32,12 @@ app:
         destination:
           prefix: "/topic"
           user-status: "/status"
+  webclient:
+    auth:
+      write-timeout: 3000
+      read-timeout: 3000
+      connect-timeout: 3000
+      url: http://localhost:8082
 
   redis:
     entity:
