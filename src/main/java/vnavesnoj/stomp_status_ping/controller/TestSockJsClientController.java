@@ -19,9 +19,19 @@ public class TestSockJsClientController {
 
     private final CredentialProperties properties;
 
-    @RequestMapping ("/sock-js-client")
-    public String sockJsClient(@Param("principal") String principal, HttpServletResponse response) {
+    @RequestMapping ("/sock-js-client/local-auth")
+    public String sockJsClientLocalAuth(@Param("principal") String principal, HttpServletResponse response) {
         final var cookie = new Cookie(properties.getPrincipalCookie(), principal);
+        cookie.setHttpOnly(false);
+        cookie.setPath("/");
+        cookie.setMaxAge(3600);
+        response.addCookie(cookie);
+        return "sock-js-stomp-client";
+    }
+
+    @RequestMapping ("/sock-js-client/remote-auth")
+    public String sockJsClientRemoteAuth(@Param("token") String token, HttpServletResponse response) {
+        final var cookie = new Cookie(properties.getTokenCookie(), token);
         cookie.setHttpOnly(false);
         cookie.setPath("/");
         cookie.setMaxAge(3600);

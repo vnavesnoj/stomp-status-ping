@@ -17,7 +17,7 @@ spring:
 app:
   http:
     auth:
-      remote: false
+      remote: true
       principal-header: "Principal"
       principal-cookie: "principal"
       token-cookie: "token"

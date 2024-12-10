@@ -1,6 +1,5 @@
 package vnavesnoj.stomp_status_ping.config;
 
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -14,7 +13,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import vnavesnoj.stomp_status_ping.config.properties.CredentialProperties;
 import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
 
@@ -31,7 +29,6 @@ import java.util.Arrays;
 @ConditionalOnProperty(value = "app.security.web.enable", havingValue = "true", matchIfMissing = true)
 public class WebSecurityConfiguration {
 
-    private final Filter authenticationFilter;
     private final StompWebSocketProperties stompProperties;
 
     @Bean
@@ -41,17 +38,13 @@ public class WebSecurityConfiguration {
                 .authorizeHttpRequests(item -> item
                         .requestMatchers(Arrays.stream(stompProperties.getEndpoints())
                                 .map(endpoint -> endpoint + "/**")
-                                .toArray(String[]::new)).authenticated()
+                                .toArray(String[]::new)).permitAll()
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/test/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 )
                 .exceptionHandling(item -> item.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .addFilterBefore(
-                        authenticationFilter,
-                        UsernamePasswordAuthenticationFilter.class
-                )
                 .build();
     }
 }

@@ -1,10 +1,13 @@
 package vnavesnoj.stomp_status_ping.security;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.Arrays;
+
+import static java.util.function.Predicate.not;
 
 /**
  * @author vnavesnoj
@@ -17,7 +20,12 @@ public class TokenCookieRequestMatcher implements RequestMatcher {
 
     @Override
     public boolean matches(HttpServletRequest request) {
-        return Arrays.stream(request.getCookies())
-                .anyMatch(cookie -> cookie.getName().equals(tokenCookie));
+        final var cookies = request.getCookies();
+        return cookies != null && Arrays.stream(cookies)
+                .filter(cookie -> cookie.getName().equals(tokenCookie))
+                .map(Cookie::getValue)
+                .findFirst()
+                .filter(not(String::isBlank))
+                .isPresent();
     }
 }
