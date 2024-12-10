@@ -13,7 +13,7 @@ import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import vnavesnoj.stomp_status_ping.security.WsAuthenticationConverter;
-import vnavesnoj.stomp_status_ping.security.filter.WsMessageMatcher;
+import vnavesnoj.stomp_status_ping.security.WsMessageMatcher;
 
 import java.util.Optional;
 

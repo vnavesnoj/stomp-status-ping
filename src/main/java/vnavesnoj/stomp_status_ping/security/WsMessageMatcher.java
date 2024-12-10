@@ -3,7 +3,12 @@
  * @mail vnavesnoj@gmail.com
  */
 
-package vnavesnoj.stomp_status_ping.security.filter;
+/*
+ * @author vnavesnoj
+ * @mail vnavesnoj@gmail.com
+ */
+
+package vnavesnoj.stomp_status_ping.security;
 
 import org.springframework.messaging.Message;
 
