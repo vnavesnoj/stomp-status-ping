@@ -1,3 +1,8 @@
+/*
+ * @author vnavesnoj
+ * @mail vnavesnoj@gmail.com
+ */
+
 package vnavesnoj.stomp_status_ping.config.properties;
 
 import lombok.Value;
@@ -8,11 +13,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @mail vnavesnoj@gmail.com
  */
 @Value
-@ConfigurationProperties("app.websocket.stomp.server")
-public class StompWebSocketProperties {
+@ConfigurationProperties("app.http.auth")
+public class CredentialProperties {
 
-    String[] endpoints;
-    String[] origins;
-    Long serverHeartbeat;
-    Long clientHeartbeat;
+    String principalHeader;
+    String principalCookie;
+    String tokenCookie;
 }

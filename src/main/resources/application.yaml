@@ -15,14 +15,17 @@ spring:
       file: classpath:/docker-compose.yaml
 
 app:
+  http:
+    auth:
+      remote: false
+      principal-header: "Principal"
+      principal-cookie: "principal"
+      token-cookie: "token"
   websocket:
     stomp:
       server:
         endpoints: "/stomp"
         origins: "*"
-        principal-header: "Principal"
-        principal-cookie: "principal"
-        token-cookie: "token"
         server-heartbeat: 10000
         client-heartbeat: 10000
         destination:

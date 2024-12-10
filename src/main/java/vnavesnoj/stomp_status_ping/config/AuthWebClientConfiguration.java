@@ -28,7 +28,7 @@ public class AuthWebClientConfiguration {
     private final int connectTimeout;
 
     public AuthWebClientConfiguration(AuthWebClientProperties properties) {
-        this.apiUrl = properties.getUrl();
+        this.apiUrl = properties.getBaseUrl();
         this.readTimeout = properties.getReadTimeout();
         this.writeTimeout = properties.getWriteTimeout();
         this.connectTimeout = properties.getConnectTimeout();

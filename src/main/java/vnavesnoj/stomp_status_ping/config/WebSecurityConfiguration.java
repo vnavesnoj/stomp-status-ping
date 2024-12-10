@@ -1,5 +1,6 @@
 package vnavesnoj.stomp_status_ping.config;
 
+import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -14,7 +15,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
-import vnavesnoj.stomp_status_ping.security.filter.PrincipalCookieAuthenticationFilter;
 
 import java.util.Arrays;
 
@@ -28,6 +28,7 @@ import java.util.Arrays;
 @ConditionalOnProperty(value = "app.security.web.enable", havingValue = "true", matchIfMissing = true)
 public class WebSecurityConfiguration {
 
+    private final Filter authenticationFilter;
     private final StompWebSocketProperties stompProperties;
 
     @Bean
@@ -45,7 +46,7 @@ public class WebSecurityConfiguration {
                 )
                 .exceptionHandling(item -> item.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .addFilterBefore(
-                        new PrincipalCookieAuthenticationFilter(stompProperties.getPrincipalCookie()),
+                        authenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
                 )
                 .build();
