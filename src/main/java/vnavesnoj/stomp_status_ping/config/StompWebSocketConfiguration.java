@@ -32,6 +32,7 @@ import vnavesnoj.stomp_status_ping.websocket.WsAuthenticationInterceptor;
         AppStompDestinationProperties.class
 })
 @EnableWebSocketMessageBroker
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
 
     private final StompWebSocketProperties wsProperties;
