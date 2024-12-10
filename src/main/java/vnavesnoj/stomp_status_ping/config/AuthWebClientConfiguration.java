@@ -3,6 +3,7 @@ package vnavesnoj.stomp_status_ping.config;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ import java.util.concurrent.TimeUnit;
  */
 @EnableConfigurationProperties(AuthWebClientProperties.class)
 @Configuration
+@ConditionalOnBean(RemoteAuthenticationFilterConfiguration.class)
 public class AuthWebClientConfiguration {
 
     private final String apiUrl;

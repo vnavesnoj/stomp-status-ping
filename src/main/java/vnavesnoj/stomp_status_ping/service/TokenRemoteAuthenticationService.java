@@ -4,7 +4,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
-import vnavesnoj.stomp_status_ping.config.properties.AuthWebClientProperties;
 import vnavesnoj.stomp_status_ping.dto.AuthResponse;
 import vnavesnoj.stomp_status_ping.dto.AuthenticationResult;
 
@@ -24,11 +23,13 @@ public class TokenRemoteAuthenticationService implements TokenAuthenticationServ
     private final String tokenHeader;
 
     public TokenRemoteAuthenticationService(WebClient authWebClient,
-                                            AuthWebClientProperties properties) {
+                                            String authPath,
+                                            long authResponseTimeout,
+                                            String tokenHeader) {
         this.authWebClient = authWebClient;
-        this.authPath = properties.getAuthPath();
-        this.authResponseTimeout = properties.getAuthResponseTimeout();
-        this.tokenHeader = properties.getTokenHeader();
+        this.authPath = authPath;
+        this.authResponseTimeout = authResponseTimeout;
+        this.tokenHeader = tokenHeader;
     }
 
 

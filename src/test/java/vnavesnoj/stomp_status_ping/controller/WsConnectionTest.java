@@ -24,6 +24,7 @@ import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 import org.testcontainers.containers.GenericContainer;
 import vnavesnoj.stomp_status_ping.config.TestRedisConfiguration;
+import vnavesnoj.stomp_status_ping.config.properties.CredentialProperties;
 import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
 
 import java.net.URI;
@@ -47,6 +48,8 @@ public class WsConnectionTest {
 
     @Autowired
     private StompWebSocketProperties properties;
+    @Autowired
+    private CredentialProperties credentialProperties;
     @Value("${local.server.port}")
     private String port;
     @Autowired
@@ -81,7 +84,7 @@ public class WsConnectionTest {
     @NotNull
     private CompletableFuture<WebSocketSession> simpleConnection(String principal) throws URISyntaxException {
         final var httpHeaders = new WebSocketHttpHeaders();
-        httpHeaders.add(properties.getPrincipalHeader(), principal);
+        httpHeaders.add("Cookie", credentialProperties.getPrincipalCookie() + "=" + principal);
         final var uri = new URI("ws://localhost:" + this.port + properties.getEndpoints()[0]);
         return sockJsClient.execute(
                 this.webSocketHandler,
@@ -93,7 +96,7 @@ public class WsConnectionTest {
     @NotNull
     private CompletableFuture<StompSession> stompConnection(String principal) throws URISyntaxException {
         final var httpHeaders = new WebSocketHttpHeaders();
-        httpHeaders.add(properties.getPrincipalHeader(), principal);
+//        httpHeaders.add(properties.getPrincipalHeader(), principal);
         final var uri = new URI("ws://localhost:" + this.port + properties.getEndpoints()[0]);
         return new WebSocketStompClient(sockJsClient).connectAsync(uri.toString(), httpHeaders, new StompSessionHandler());
     }
