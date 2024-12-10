@@ -37,7 +37,9 @@ app:
       write-timeout: 3000
       read-timeout: 3000
       connect-timeout: 3000
-      url: http://localhost:8082
+      base-url: http://localhost:8082
+      auth-path: /auth/chatAuth
+      auth-response-timeout: 5000
 
   redis:
     entity:

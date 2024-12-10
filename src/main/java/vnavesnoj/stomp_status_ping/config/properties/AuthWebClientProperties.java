@@ -11,8 +11,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("app.webclient.auth")
 public class AuthWebClientProperties {
 
-    String url;
+    String baseUrl;
+    String authPath;
     int writeTimeout;
     int readTimeout;
     int connectTimeout;
+    long authResponseTimeout;
 }
