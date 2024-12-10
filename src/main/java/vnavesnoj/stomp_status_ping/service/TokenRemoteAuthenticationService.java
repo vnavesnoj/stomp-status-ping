@@ -1,7 +1,6 @@
 package vnavesnoj.stomp_status_ping.service;
 
 import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
@@ -17,7 +16,6 @@ import java.util.Optional;
  * @mail vnavesnoj@gmail.com
  */
 @Log4j2
-@Service
 public class TokenRemoteAuthenticationService implements TokenAuthenticationService {
 
     private final WebClient authWebClient;
