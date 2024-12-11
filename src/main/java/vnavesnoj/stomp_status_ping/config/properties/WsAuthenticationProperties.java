@@ -14,7 +14,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Value
 @ConfigurationProperties("app.websocket.stomp.auth")
-public class WsCredentialProperties {
+public class WsAuthenticationProperties {
 
     String usernameHeader;
+    String tokenHeader;
+    boolean locale;
 }

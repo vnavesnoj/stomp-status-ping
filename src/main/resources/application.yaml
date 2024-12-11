@@ -30,7 +30,9 @@ app:
           prefix: "/topic"
           user-status: "/status"
       auth:
+        locale: false
         username-header: "username"
+        token-header: "token"
   webclient:
     auth:
       write-timeout: 3000

@@ -7,11 +7,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ott.OneTimeTokenAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 import vnavesnoj.stomp_status_ping.dto.AuthenticationResult;
 import vnavesnoj.stomp_status_ping.service.TokenAuthenticationService;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,6 +22,7 @@ import java.util.Optional;
 public class TokenAuthenticationManager implements AuthenticationManager {
 
     private final TokenAuthenticationService service;
+    private final List<GrantedAuthority> defaultGrantedAuthorities;
 
     @Override
     public Authentication authenticate(@NonNull Authentication authentication) throws AuthenticationException {
@@ -34,7 +35,7 @@ public class TokenAuthenticationManager implements AuthenticationManager {
                 .map(AuthenticationResult::getUsername)
                 .map(item -> OneTimeTokenAuthenticationToken.authenticated(
                         item,
-                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+                        defaultGrantedAuthorities
                 ))
                 .orElseThrow(() -> new BadCredentialsException("Invalid token"));
     }

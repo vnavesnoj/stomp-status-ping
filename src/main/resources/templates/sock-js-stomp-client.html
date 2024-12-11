@@ -13,7 +13,7 @@
 </div>
 <script>
     var stompClient = null;
-    var username = prompt('Enter your name:');
+    var credentials = prompt('Enter your credentials:');
 
     function connect() {
         var socket = new SockJS('http://localhost:8080/stomp', null, {
@@ -21,7 +21,7 @@
             withCredentials: true
         });
         stompClient = Stomp.over(socket);
-        var headers = {username: username}
+        var headers = {token: credentials}
         stompClient.connect(headers, onConnected, onError);
     }
 

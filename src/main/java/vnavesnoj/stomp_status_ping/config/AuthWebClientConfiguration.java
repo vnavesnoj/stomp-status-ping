@@ -12,7 +12,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.tcp.TcpClient;
 import vnavesnoj.stomp_status_ping.config.properties.AuthWebClientProperties;
-import vnavesnoj.stomp_status_ping.service.TokenRemoteAuthenticationService;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  */
 @EnableConfigurationProperties(AuthWebClientProperties.class)
 @Configuration
-@ConditionalOnBean(TokenRemoteAuthenticationService.class)
+@ConditionalOnBean(RemoteTokenWsAuthConfig.class)
 public class AuthWebClientConfiguration {
 
     private final String apiUrl;
