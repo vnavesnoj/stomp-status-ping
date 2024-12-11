@@ -32,7 +32,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @EnableConfigurationProperties(WsAuthenticationProperties.class)
-@ConditionalOnProperty(name = "app.websocket.stomp.auth.locale", havingValue = "false", matchIfMissing = true)
+@ConditionalOnProperty(name = "app.websocket.stomp.auth.local", havingValue = "false", matchIfMissing = true)
 @Configuration
 public class RemoteTokenWsAuthConfig {
 

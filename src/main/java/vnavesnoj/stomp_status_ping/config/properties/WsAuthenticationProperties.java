@@ -18,5 +18,5 @@ public class WsAuthenticationProperties {
 
     String usernameHeader;
     String tokenHeader;
-    boolean locale;
+    boolean local;
 }

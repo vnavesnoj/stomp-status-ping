@@ -21,7 +21,7 @@
             withCredentials: true
         });
         stompClient = Stomp.over(socket);
-        var headers = {token: credentials}
+        var headers = {username: credentials}
         stompClient.connect(headers, onConnected, onError);
     }
 

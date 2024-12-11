@@ -3,25 +3,28 @@ spring:
     name: stomp-status-ping
 
   profiles:
-    active: dev
+    active: ${APP_PROFILE}
 
-  session:
-    redis:
-      flush-mode: on_save
-      namespace: spring:session
-      repository-type: indexed
   docker:
     compose:
-      file: classpath:/docker-compose.yaml
+      enabled: false
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      database: ${REDIS_DB:0}
 
 app:
+  testing-page:
+    enabled: ${APP_TESTING_PAGE_ENABLED:false}
   websocket:
     stomp:
       server:
-        endpoints: "/stomp"
+        endpoints: ${APP_STOMP_ENDPOINT:/stomp}
         origins: "*"
-        server-heartbeat: 10000
-        client-heartbeat: 10000
+        server-heartbeat: ${APP_SERVER_HEARTBEAT:10000}
+        client-heartbeat: ${APP_CLIENT_HEARTBEAT:10000}
         destination:
           prefix: "/app"
           current-user-status: "/current-status"
@@ -30,30 +33,30 @@ app:
           prefix: "/topic"
           user-status: "/status"
       auth:
-        locale: false
-        username-header: "username"
-        token-header: "token"
+        local: ${APP_AUTH_LOCAL:false}
+        username-header: ${APP_AUTH_USERNAME_HEADER:username}
+        token-header: ${APP_AUTH_TOKEN_HEADER:token}
   webclient:
     auth:
       write-timeout: 3000
       read-timeout: 3000
       connect-timeout: 3000
-      base-url: http://localhost:8082
-      auth-path: /auth/chatAuth
+      base-url: ${APP_AUTH_REMOTE_BASE_URL:http://localhost:8082}
+      auth-path: ${APP_AUTH_REMOTE_AUTH_PATH:/auth/chatAuth}
       auth-response-timeout: 5000
-      token-header: "Authorization"
+      token-header: ${APP_AUTH_REMOTE_TOKEN_HEADER:Authorization}
 
   redis:
     entity:
       active-ws-session:
-        ttl: 60
+        ttl: ${APP_REDIS_SESSION_TTL:60}
 
 
 server:
   servlet:
     session:
-      timeout: 60
+      timeout: ${APP_SERVLET_SESSION_TIMEOUT:60}
 
 logging:
   level:
-    root: info
+    root: ${APP_LOGGING_LEVEL:info}
