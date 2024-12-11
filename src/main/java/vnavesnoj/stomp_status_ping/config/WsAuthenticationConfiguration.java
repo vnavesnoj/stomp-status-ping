@@ -14,8 +14,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import vnavesnoj.stomp_status_ping.config.properties.WsCredentialProperties;
+import vnavesnoj.stomp_status_ping.security.HeaderWsAuthenticationConverter;
 import vnavesnoj.stomp_status_ping.security.HeaderWsMessageMatcher;
-import vnavesnoj.stomp_status_ping.security.UsernameHeaderWsAuthenticationConverter;
 import vnavesnoj.stomp_status_ping.websocket.WsAuthenticationInterceptor;
 
 import java.util.Collections;
@@ -38,7 +38,10 @@ public class WsAuthenticationConfiguration {
     @Bean
     WsAuthenticationInterceptor usernameHeaderWsAuthenticationInterceptor() {
         final var matcher = new HeaderWsMessageMatcher(properties.getUsernameHeader());
-        final var converter = new UsernameHeaderWsAuthenticationConverter(properties.getUsernameHeader());
+        final var converter = new HeaderWsAuthenticationConverter(
+                properties.getUsernameHeader(),
+                (username) -> UsernamePasswordAuthenticationToken.unauthenticated(username, null)
+        );
         final AuthenticationManager manager = (authentication) ->
                 UsernamePasswordAuthenticationToken.authenticated(
                         authentication.getPrincipal(),

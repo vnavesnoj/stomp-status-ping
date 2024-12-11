@@ -8,10 +8,10 @@ package vnavesnoj.stomp_status_ping.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import static java.util.function.Predicate.not;
 
@@ -20,16 +20,17 @@ import static java.util.function.Predicate.not;
  * @mail vnavesnoj@gmail.com
  */
 @RequiredArgsConstructor
-public class UsernameHeaderWsAuthenticationConverter implements WsAuthenticationConverter {
+public class HeaderWsAuthenticationConverter implements WsAuthenticationConverter {
 
-    private final String usernameHeader;
+    private final String header;
+    private final Function<? super String, ? extends Authentication> authenticationExtractor;
 
     @Override
     public Authentication convert(Message<?> message) {
         return Optional.of(message)
-                .map(item -> StompHeaderAccessor.getFirstNativeHeader(usernameHeader, message.getHeaders()))
+                .map(item -> StompHeaderAccessor.getFirstNativeHeader(header, message.getHeaders()))
                 .filter(not(String::isBlank))
-                .map(item -> UsernamePasswordAuthenticationToken.unauthenticated(item, null))
+                .map(authenticationExtractor)
                 .orElse(null);
     }
 }

@@ -9,6 +9,8 @@ import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionDeletedDto;
 import vnavesnoj.stomp_status_ping.service.ActiveWsSessionService;
 import vnavesnoj.stomp_status_ping.websocket.payload.UserStatus;
 
+import java.util.Objects;
+
 /**
  * @author vnavesnoj
  * @mail vnavesnoj@gmail.com
@@ -23,7 +25,8 @@ public class WebSocketDisconnectEvent implements ApplicationListener<SessionDisc
 
     @Override
     public void onApplicationEvent(SessionDisconnectEvent event) {
-        final var username = event.getUser().getName();
+        //TODO user can be null (not authenticated)
+        final var username = Objects.requireNonNull(event.getUser()).getName();
         final var sessionId = event.getSessionId();
         log.info("Session %s disconnected with status %s".formatted(
                 username + ":" + sessionId, event.getCloseStatus()
