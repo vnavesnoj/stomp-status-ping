@@ -3,7 +3,6 @@ package vnavesnoj.stomp_status_ping.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -13,7 +12,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import vnavesnoj.stomp_status_ping.config.properties.HttpCredentialProperties;
 import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
 
 import java.util.Arrays;
@@ -25,7 +23,6 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
-@EnableConfigurationProperties(HttpCredentialProperties.class)
 @ConditionalOnProperty(value = "app.security.web.enable", havingValue = "true", matchIfMissing = true)
 public class WebSecurityConfiguration {
 

@@ -3,7 +3,6 @@ package vnavesnoj.stomp_status_ping.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import vnavesnoj.stomp_status_ping.config.properties.HttpCredentialProperties;
 
 /**
  * @author vnavesnoj
@@ -13,8 +12,6 @@ import vnavesnoj.stomp_status_ping.config.properties.HttpCredentialProperties;
 @Controller
 @RequestMapping("/test")
 public class TestSockJsClientController {
-
-    private final HttpCredentialProperties properties;
 
     @RequestMapping ("/sock-js-client")
     public String sockJsClientLocalAuth() {

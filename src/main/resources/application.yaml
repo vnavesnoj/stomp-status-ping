@@ -15,12 +15,6 @@ spring:
       file: classpath:/docker-compose.yaml
 
 app:
-  http:
-    auth:
-      remote: true
-      principal-header: "Principal"
-      principal-cookie: "principal"
-      token-cookie: "token"
   websocket:
     stomp:
       server:
@@ -36,7 +30,7 @@ app:
           prefix: "/topic"
           user-status: "/status"
       auth:
-        username-header: "Username"
+        username-header: "username"
   webclient:
     auth:
       write-timeout: 3000
