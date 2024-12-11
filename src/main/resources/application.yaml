@@ -3,7 +3,7 @@ spring:
     name: stomp-status-ping
 
   profiles:
-    active: ${APP_PROFILE}
+    active: ${APP_PROFILE:default}
 
   docker:
     compose:
