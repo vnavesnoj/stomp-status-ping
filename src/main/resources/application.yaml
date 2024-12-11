@@ -14,6 +14,7 @@ spring:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
       database: ${REDIS_DB:0}
+      password: ${REDIS_PASSWORD:}
 
 app:
   testing-page:
