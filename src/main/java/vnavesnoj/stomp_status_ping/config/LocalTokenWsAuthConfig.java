@@ -36,7 +36,7 @@ import java.util.List;
 public class LocalTokenWsAuthConfig {
 
     private final WsAuthenticationProperties properties;
-    private static final String TOKENS_PROPERTIES = "tokens.properties";
+    private static final String TOKENS_PROPERTIES = "classpath:tokens.properties";
     private final List<GrantedAuthority> defaultAuthorities =
             Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
 

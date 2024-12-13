@@ -19,6 +19,7 @@ spring:
 app:
   testing-page:
     enabled: ${APP_TESTING_PAGE_ENABLED:false}
+    server-host: ${APP_HOST:localhost}
   websocket:
     stomp:
       server:
@@ -52,11 +53,11 @@ app:
       active-ws-session:
         ttl: ${APP_REDIS_SESSION_TTL:60}
 
-
 server:
   servlet:
     session:
       timeout: ${APP_SERVLET_SESSION_TIMEOUT:60}
+  port: ${SEVER_PORT:8080}
 
 logging:
   level:

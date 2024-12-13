@@ -6,7 +6,6 @@
 package vnavesnoj.stomp_status_ping.service;
 
 import lombok.SneakyThrows;
-import org.springframework.core.io.InputStreamSource;
 import org.springframework.core.io.ResourceLoader;
 import vnavesnoj.stomp_status_ping.dto.AuthenticationResult;
 
@@ -28,7 +27,13 @@ public class TokenPropertiesAuthenticationService implements TokenAuthentication
                                                 ResourceLoader resourceLoader) {
         this.tokens = Optional.of(tokenPropertiesPath)
                 .map(resourceLoader::getResource)
-                .map(InputStreamSource::getInputStream)
+                .map(item -> {
+                    try {
+                        return item.getInputStream();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .map(item -> {
                             final var properties = new Properties();
                             try {
