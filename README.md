@@ -62,3 +62,32 @@ payload типа json о текущем статусе пользователя:
 `spring.data.redis`
 * Доступ к серверу аутентификации по токену. Параметры доступа находятся в [src/main/resources/application.yaml](src/main/resources/application.yaml) 
 `app.webclient.auth`
+
+### Local-build
+* Для тестирования приложения непосредственно локально на хосте
+можно воспользоваться [docker-compose-localbuild.yaml](./docker-compose-localbuild.yaml)
+* Этот `docker-compose` собирает и запускает приложение с предустановленной
+Redis и environment variables.
+* Environment:
+  - `APP_TESTING_PAGE_ENABLED=true` >>> открывает доступ к странице для 
+тестирования приложения.
+  - `APP_AUTH_LOCAL=true` >>> использует локальный сервис авторизации по токену.
+Список токенов с их тестовыми `username` берется из 
+[src/main/resources/tokens.properties](src/main/resources/tokens.properties)
+  - `REDIS_HOST=redis` >>> хост для подключения к Redis с доменом, указаном в
+    [docker-compose-localbuild.yaml](./docker-compose-localbuild.yaml)
+* Запуск [docker-compose-localbuild.yaml](./docker-compose-localbuild.yaml) возможен по команде:
+`docker compose -f docker-compose-localbuild.yaml up`
+* Приложение по-умолчанию запускается на порту `8080`.
+
+### Testing Page
+* При включенном свойстве `APP_TESTING_PAGE_ENABLED=true` будет
+открыт доступ к ендпоинту `/test/sock-js-client`.
+* При посещении данного адресса через браузер 
+(например, http://localhost:8080/test/sock-js-client),
+будет предложенно ввести `token`. В случае подтвержения
+валидного токена будет осуществленно аутентифицированное websocket
+соединение. Соотвествующее сообщение будет выведенно в логах в консоле.
+* Чтобы подписаться на изменения статуса интересуемого пользователя,
+нужно ввести в предлагаемое поле его `username` и нажать `Send`.
+* Соотвествующие сообщения о работе websocket сессии выводятся в логах в консоле.
