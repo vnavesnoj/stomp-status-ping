@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: stomp-status-ping-local
+
+app:
+  testing-page:
+    enabled: true
+  websocket:
+    stomp:
+      auth:
+        local: true
