@@ -1,8 +1,7 @@
 package vnavesnoj.stomp_status_ping.controller;
 
-import org.springframework.beans.factory.annotation.Value;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,21 +16,22 @@ import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
 @RequestMapping("/test")
 public class TestSockJsClientController {
 
-    private final String sockJsUrl;
+    private final String sockJsEndpoint;
 
-    public TestSockJsClientController(@Value("${app.testing-page.server-host}")
-                                      String serverHost,
-                                      StompWebSocketProperties wsProperties,
-                                      ServerProperties serverProperties) {
-        sockJsUrl = String.format("http://%s:%d%s",
-                serverHost,
-                serverProperties.getPort(),
-                wsProperties.getEndpoints()[0]);
+    public TestSockJsClientController(StompWebSocketProperties wsProperties) {
+        sockJsEndpoint = wsProperties.getEndpoints()[0];
     }
 
 
     @RequestMapping("/sock-js-client")
-    public String sockJsClientLocalAuth(Model model) {
+    public String sockJsClientLocalAuth(HttpServletRequest request,
+                                        Model model) {
+        final var sockJsUrl = "%s://%s:%d%s".formatted(
+                request.getScheme(),
+                request.getServerName(),
+                request.getServerPort(),
+                sockJsEndpoint
+        );
         model.addAttribute("sockJsUrl", sockJsUrl);
         return "sock-js-stomp-client";
     }

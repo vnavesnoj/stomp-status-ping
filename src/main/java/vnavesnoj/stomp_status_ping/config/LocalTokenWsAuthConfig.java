@@ -45,7 +45,7 @@ public class LocalTokenWsAuthConfig {
         final var matcher = new HeaderWsMessageMatcher(properties.getTokenHeader());
         final var converter = new HeaderWsAuthenticationConverter(
                 properties.getTokenHeader(),
-                (username) -> OneTimeTokenAuthenticationToken.unauthenticated(username, null)
+                OneTimeTokenAuthenticationToken::unauthenticated
         );
         final var tokenService = new TokenPropertiesAuthenticationService(TOKENS_PROPERTIES, resourceLoader);
         final AuthenticationManager manager = new TokenAuthenticationManager(

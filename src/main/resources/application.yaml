@@ -19,7 +19,6 @@ spring:
 app:
   testing-page:
     enabled: ${APP_TESTING_PAGE_ENABLED:false}
-    server-host: ${APP_HOST:localhost}
   websocket:
     stomp:
       server:

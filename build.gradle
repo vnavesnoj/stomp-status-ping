@@ -51,3 +51,10 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+tasks.register('copyCompose', Copy) {
+    from layout.projectDirectory.file('docker-compose.yaml')
+    into layout.buildDirectory.dir('libs')
+}
+
+bootJar.dependsOn copyCompose
