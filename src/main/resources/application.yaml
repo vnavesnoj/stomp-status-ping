@@ -31,12 +31,12 @@ app:
           current-user-status: "/current-status"
       broker:
         external:
-          enabled: false
+          enabled: ${APP_BROKER_ENABLED:false}
           virtual-host: /
-          relay-host: localhost
-          relay-port: 61613
-          client-login: guest
-          client-passcode: guest
+          relay-host: ${APP_BROKER_RELAY_HOST:localhost}
+          relay-port: ${APP_BROKER_RELAY_PORT:61613}
+          client-login: ${APP_BROKER_CLIENT_LOGIN:guest}
+          client-passcode: ${APP_BROKER_CLIENT_PASSCODE:guest}
           system-login: guest
           system-passcode: guest
           heartbeat-send-interval: 10000
