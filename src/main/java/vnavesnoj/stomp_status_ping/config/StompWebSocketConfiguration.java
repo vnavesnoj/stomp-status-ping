@@ -40,19 +40,21 @@ public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfig
     private final StompWebSocketProperties wsProperties;
     private final BrokerDestinationProperties brokerProperties;
     private final AppStompDestinationProperties appStompProperties;
+    private final ExternalBrokerProperties externalBrokerProperties;
     private final ChannelInterceptor wsSessionUpdateInterceptor;
     private final WsAuthenticationInterceptor wsAuthenticationInterceptor;
     private final TaskScheduler messageBrokerTaskScheduler;
 
     public StompWebSocketConfiguration(StompWebSocketProperties wsProperties,
                                        BrokerDestinationProperties brokerProperties,
-                                       AppStompDestinationProperties appStompProperties,
+                                       AppStompDestinationProperties appStompProperties, ExternalBrokerProperties externalBrokerProperties,
                                        ChannelInterceptor wsSessionUpdateInterceptor,
                                        WsAuthenticationInterceptor wsAuthenticationInterceptor,
                                        @Lazy TaskScheduler messageBrokerTaskScheduler) {
         this.wsProperties = wsProperties;
         this.brokerProperties = brokerProperties;
         this.appStompProperties = appStompProperties;
+        this.externalBrokerProperties = externalBrokerProperties;
         this.wsSessionUpdateInterceptor = wsSessionUpdateInterceptor;
         this.wsAuthenticationInterceptor = wsAuthenticationInterceptor;
         this.messageBrokerTaskScheduler = messageBrokerTaskScheduler;
@@ -67,10 +69,27 @@ public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfig
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes(appStompProperties.getPrefix(), brokerProperties.getPrefix())
-                .enableSimpleBroker(brokerProperties.getPrefix())
-                .setHeartbeatValue(new long[]{wsProperties.getServerHeartbeat(), wsProperties.getClientHeartbeat()})
-                .setTaskScheduler(messageBrokerTaskScheduler);
+        if (externalBrokerProperties.isEnabled()) {
+            final var stompBrokerRelayRegistration = registry.enableStompBrokerRelay(brokerProperties.getPrefix())
+                    .setRelayHost(externalBrokerProperties.getRelayHost())
+                    .setRelayPort(externalBrokerProperties.getRelayPort())
+                    .setClientLogin(externalBrokerProperties.getClientLogin())
+                    .setClientPasscode(externalBrokerProperties.getClientPasscode());
+            if (externalBrokerProperties.getSystemLogin() != null) {
+                stompBrokerRelayRegistration.setSystemLogin(externalBrokerProperties.getSystemLogin());
+            }
+            if (externalBrokerProperties.getSystemPasscode() != null) {
+                stompBrokerRelayRegistration.setSystemPasscode(externalBrokerProperties.getSystemPasscode());
+            }
+            stompBrokerRelayRegistration.setTaskScheduler(messageBrokerTaskScheduler)
+                    .setSystemHeartbeatSendInterval(externalBrokerProperties.getHeartbeatSendInterval())
+                    .setSystemHeartbeatReceiveInterval(externalBrokerProperties.getHeartbeatReceiveInterval());
+        } else {
+            registry.enableSimpleBroker(brokerProperties.getPrefix())
+                    .setHeartbeatValue(new long[]{wsProperties.getServerHeartbeat(), wsProperties.getClientHeartbeat()})
+                    .setTaskScheduler(messageBrokerTaskScheduler);
+        }
+        registry.setApplicationDestinationPrefixes(appStompProperties.getPrefix(), brokerProperties.getPrefix());
     }
 
     @Override

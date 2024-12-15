@@ -41,6 +41,8 @@ app:
           client-passcode: quest
           system-login: quest
           system-passcode: quest
+          heartbeat-send-interval: 10000
+          heartbeat-receive-interval: 10000
         destination:
           prefix: "/topic"
           user-status: "/status"

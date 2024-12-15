@@ -13,9 +13,11 @@ public class ExternalBrokerProperties {
 
     boolean enabled;
     String relayHost;
-    String relayPort;
+    int relayPort;
     String clientLogin;
     String clientPasscode;
     String systemLogin;
     String systemPasscode;
+    long heartbeatSendInterval;
+    long heartbeatReceiveInterval;
 }
