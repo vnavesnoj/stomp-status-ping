@@ -63,6 +63,14 @@ payload типа json о текущем статусе пользователя:
 * Доступ к серверу аутентификации по токену. Параметры доступа находятся в [src/main/resources/application.yaml](src/main/resources/application.yaml) 
 `app.webclient.auth`
 
+### External broker
+* По-умолчанию приложение работает на собственном in-memory брокере сообщений.
+* Для работы с внешним брокером, нужно прописать свойство `app.websocket.stomp.broker.external.enabled=true` или `APP_BROKER_ENABLED:true`
+* Все основные детали подключения можно найти в [src/main/resources/application.yaml](src/main/resources/application.yaml) 
+`app.websocket.stomp.broker.external`
+* **Важно, чтобы внешний брокер сообщений поддерживал работу STOMP протокола** 
+(например, `RabbitMq` с плагином `rabbitmq_stomp`)
+
 ### Local-build
 * Для тестирования приложения непосредственно локально на хосте
 можно воспользоваться [docker-compose-localbuild.yaml](./docker-compose-localbuild.yaml)
