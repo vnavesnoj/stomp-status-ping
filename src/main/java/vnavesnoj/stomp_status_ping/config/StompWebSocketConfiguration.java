@@ -16,6 +16,7 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import vnavesnoj.stomp_status_ping.config.properties.AppStompDestinationProperties;
 import vnavesnoj.stomp_status_ping.config.properties.BrokerDestinationProperties;
+import vnavesnoj.stomp_status_ping.config.properties.ExternalBrokerProperties;
 import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
 import vnavesnoj.stomp_status_ping.websocket.NoopChannelInterceptor;
 import vnavesnoj.stomp_status_ping.websocket.WsAuthenticationInterceptor;
@@ -29,7 +30,8 @@ import vnavesnoj.stomp_status_ping.websocket.WsAuthenticationInterceptor;
 @EnableConfigurationProperties({
         StompWebSocketProperties.class,
         BrokerDestinationProperties.class,
-        AppStompDestinationProperties.class
+        AppStompDestinationProperties.class,
+        ExternalBrokerProperties.class
 })
 @EnableWebSocketMessageBroker
 @Order(Ordered.HIGHEST_PRECEDENCE)

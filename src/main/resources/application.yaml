@@ -9,6 +9,9 @@ spring:
     compose:
       enabled: false
 
+  rabbitmq:
+
+
   data:
     redis:
       host: ${REDIS_HOST:localhost}
@@ -30,6 +33,14 @@ app:
           prefix: "/app"
           current-user-status: "/current-status"
       broker:
+        external:
+          enabled: false
+          relay-host: localhost
+          relay-port: 61613
+          client-login: quest
+          client-passcode: quest
+          system-login: quest
+          system-passcode: quest
         destination:
           prefix: "/topic"
           user-status: "/status"

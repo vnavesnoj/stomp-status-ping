@@ -67,6 +67,16 @@
 </div>
 
 <script th:inline="javascript">
+
+    // const originalConsoleLog = console.log;
+    // console.log = function(message) {
+    //     originalConsoleLog(message);
+    //     const logOutput = document.getElementById('log-output');
+    //     const newMessage = document.createElement('div');
+    //     newMessage.textContent = message;
+    //     logOutput.appendChild(newMessage);
+    // };
+
     let stompClient = null;
     let credentials = prompt('Enter your token:');
 
