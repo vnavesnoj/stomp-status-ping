@@ -9,9 +9,6 @@ spring:
     compose:
       enabled: false
 
-  rabbitmq:
-
-
   data:
     redis:
       host: ${REDIS_HOST:localhost}
@@ -35,12 +32,13 @@ app:
       broker:
         external:
           enabled: false
+          virtual-host: /
           relay-host: localhost
           relay-port: 61613
-          client-login: quest
-          client-passcode: quest
-          system-login: quest
-          system-passcode: quest
+          client-login: guest
+          client-passcode: guest
+          system-login: guest
+          system-passcode: guest
           heartbeat-send-interval: 10000
           heartbeat-receive-interval: 10000
         destination:

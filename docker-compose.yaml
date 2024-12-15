@@ -4,4 +4,13 @@ services:
     image: "redis:7"
     ports:
       - "6379:6379"
-    profiles: [dev]
+    profiles: [ dev ]
+
+  rabbitmq:
+    build:
+      dockerfile: ./rabbitmq-stomp.Dockerfile
+      context: .
+    ports:
+      - '15672:15672'
+      - '61613:61613'
+    profiles: [ dev ]

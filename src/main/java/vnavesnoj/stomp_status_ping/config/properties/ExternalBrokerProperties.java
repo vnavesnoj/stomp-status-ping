@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ExternalBrokerProperties {
 
     boolean enabled;
+    String virtualHost;
     String relayHost;
     int relayPort;
     String clientLogin;

@@ -71,6 +71,7 @@ public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfig
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         if (externalBrokerProperties.isEnabled()) {
             final var stompBrokerRelayRegistration = registry.enableStompBrokerRelay(brokerProperties.getPrefix())
+                    .setVirtualHost(externalBrokerProperties.getVirtualHost())
                     .setRelayHost(externalBrokerProperties.getRelayHost())
                     .setRelayPort(externalBrokerProperties.getRelayPort())
                     .setClientLogin(externalBrokerProperties.getClientLogin())
