@@ -11,6 +11,7 @@
             margin: 0;
             padding: 20px;
         }
+
         #chat-page {
             background-color: #fff;
             padding: 20px;
@@ -18,12 +19,14 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
+
         #log-area {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         input[type="text"] {
             width: calc(100% - 22px);
             padding: 10px;
@@ -31,6 +34,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
         button {
             padding: 10px 20px;
             margin: 5px 0;
@@ -40,12 +44,15 @@
             color: #fff;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #0056b3;
         }
+
         h2 {
             margin-top: 0;
         }
+
         pre {
             white-space: pre-wrap;
             word-wrap: break-word;
@@ -77,13 +84,16 @@
     //     logOutput.appendChild(newMessage);
     // };
 
+    /*<![CDATA[*/
+    const sockJsUrl = /*[[${sockJsUrl}]]*/
+    const brokerUserStatusDestination = /*[[${brokerUserStatusDestination}]]*/
+    const appUserStatusDestination = /*[[${appUserStatusDestination}]]*/
+    /*]]>*/
     let stompClient = null;
     let credentials = prompt('Enter your token:');
 
     function connect() {
-        /*<![CDATA[*/
-        const socket = new SockJS(/*[[${sockJsUrl}]]*/, null, {transports: ['xhr-streaming'], withCredentials: true});
-        /*]]>*/
+        const socket = new SockJS(sockJsUrl, null, {transports: ['xhr-streaming'], withCredentials: true});
         stompClient = Stomp.over(socket);
         const headers = {token: credentials};
         stompClient.connect(headers, onConnected, onError);
@@ -98,14 +108,14 @@
     function topicSubscribe() {
         const username = document.getElementById("message-input").value;
         const headers = {id: username};
-        stompClient.subscribe('/topic/status', function (message) {
+        stompClient.subscribe(brokerUserStatusDestination, function (message) {
             logMessage('Subscribed to the ' + username + '. Received message: ' + message.body);
         }, headers);
     }
 
     function getCurrentStatus() {
         const headers = {id: document.getElementById("message-input").value};
-        stompClient.subscribe('/app/current-status', function (message) {
+        stompClient.subscribe(appUserStatusDestination, function (message) {
             logMessage('Received message: ' + message.body);
         }, headers);
     }
@@ -117,7 +127,7 @@
     }
 
     function disconnect() {
-        stompClient.disconnect(function() {
+        stompClient.disconnect(function () {
             logMessage('Disconnected');
         });
     }

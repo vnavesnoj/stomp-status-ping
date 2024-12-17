@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import vnavesnoj.stomp_status_ping.config.properties.AppStompDestinationProperties;
+import vnavesnoj.stomp_status_ping.config.properties.BrokerDestinationProperties;
 import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
 
 /**
@@ -17,9 +19,15 @@ import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
 public class TestSockJsClientController {
 
     private final String sockJsEndpoint;
+    private final String brokerUserStatusDestination;
+    private final String appUserStatusDestination;
 
-    public TestSockJsClientController(StompWebSocketProperties wsProperties) {
-        sockJsEndpoint = wsProperties.getEndpoints()[0];
+    public TestSockJsClientController(StompWebSocketProperties wsProperties,
+                                      BrokerDestinationProperties brokerProperties,
+                                      AppStompDestinationProperties appProperties) {
+        this.sockJsEndpoint = wsProperties.getEndpoints()[0];
+        this.brokerUserStatusDestination = brokerProperties.getPrefix() + brokerProperties.getUserStatus();
+        this.appUserStatusDestination = appProperties.getPrefix() + appProperties.getCurrentUserStatus();
     }
 
 
@@ -33,6 +41,8 @@ public class TestSockJsClientController {
                 sockJsEndpoint
         );
         model.addAttribute("sockJsUrl", sockJsUrl);
+        model.addAttribute("brokerUserStatusDestination", brokerUserStatusDestination);
+        model.addAttribute("appUserStatusDestination", appUserStatusDestination);
         return "sock-js-stomp-client";
     }
 }
