@@ -1,0 +1,28 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: [self-hosted, backend]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: |
+          docker build -t codersbud/status-ping:latest -f Dockerfile .
+
+      - name: Deploy to EC2
+        run: |
+          echo "${{ secrets.SSH_KEY }}" > vs.pem
+          chmod 600 vs.pem
+          ssh -o StrictHostKeyChecking=no -i "vs.pem" ubuntu@51.21.70.72 << 'EOF'
+            cd /home/ubuntu &&
+            ls -l &&
+            docker compose up -d
+          EOF
