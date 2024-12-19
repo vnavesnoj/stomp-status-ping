@@ -19,7 +19,7 @@ spring:
 app:
   testing-page:
     enabled: ${APP_TESTING_PAGE_ENABLED:false}
-    stomp-url: "ws://localhost:8080/stomp"
+    stomp-url: "ws://localhost:8081/stomp"
   websocket:
     stomp:
       server:
