@@ -9,5 +9,5 @@ FROM eclipse-temurin:21-jdk-jammy
 WORKDIR /app
 VOLUME /tmp
 COPY --from=build /app/build/libs/*.jar /app/app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+EXPOSE 8081
+ENTRYPOINT ["java", "-jar", "/app/app.jar", "--server.address=0.0.0.0"]

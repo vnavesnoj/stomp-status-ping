@@ -68,7 +68,7 @@ server:
   servlet:
     session:
       timeout: ${APP_SERVLET_SESSION_TIMEOUT:60}
-  port: ${SEVER_PORT:8080}
+  port: ${SEVER_PORT:8081}
   address: 0.0.0.0
 
 logging:
