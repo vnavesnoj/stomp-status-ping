@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Stomp Status Ping Application</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <style>
         body {
@@ -74,26 +73,17 @@
 </div>
 
 <script th:inline="javascript">
-
-    // const originalConsoleLog = console.log;
-    // console.log = function(message) {
-    //     originalConsoleLog(message);
-    //     const logOutput = document.getElementById('log-output');
-    //     const newMessage = document.createElement('div');
-    //     newMessage.textContent = message;
-    //     logOutput.appendChild(newMessage);
-    // };
-
     /*<![CDATA[*/
-    const sockJsUrl = /*[[${sockJsUrl}]]*/
+    const stompUrl = /*[[${stompUrl}]]*/
     const brokerUserStatusDestination = /*[[${brokerUserStatusDestination}]]*/
     const appUserStatusDestination = /*[[${appUserStatusDestination}]]*/
-    /*]]>*/
-    let stompClient = null;
+        /*]]>*/
+
+        let stompClient = null;
     let credentials = prompt('Enter your token:');
 
     function connect() {
-        const socket = new SockJS(sockJsUrl, null, {transports: ['xhr-streaming'], withCredentials: true});
+        const socket = new WebSocket(stompUrl);
         stompClient = Stomp.over(socket);
         const headers = {token: credentials};
         stompClient.connect(headers, onConnected, onError);
