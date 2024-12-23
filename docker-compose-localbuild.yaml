@@ -7,16 +7,25 @@ services:
     networks:
       - app_network
 
+  rabbitmq:
+    build:
+      dockerfile: ./rabbitmq-stomp.Dockerfile
+      context: .
+    ports:
+      - '15672:15672'
+      - '61613:61613'
+
   stomp-status-ping:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./Dockerfile
     ports:
       - "8080:8080"
     networks:
       - app_network
     environment:
       - APP_TESTING_PAGE_ENABLED=true
+      - app.testing-page.stomp-url=ws://localhost:8080/stomp
       - APP_AUTH_LOCAL=true
       - REDIS_HOST=redis
 

@@ -1,0 +1,78 @@
+>>> Connect by creating a new session using the token. Expected heartbeats of client and server - 10 seconds
+CONNECT
+token:token1
+accept-version:1.1,1.0
+heart-beat:10000,10000
+
+
+
+<<< Response upon successful connection
+CONNECTED
+server:RabbitMQ/4.0.4
+session:session-3IMRuDLMLmhPCy5wWtKVIA
+heart-beat:10000,10000
+version:1.1
+user-name:dummy1
+
+___________________________________________________________
+
+>>> Subscribe to updates from user dummy2
+SUBSCRIBE
+id:dummy2
+destination:/topic/status
+
+
+
+<<< Response upon successful subscription
+MESSAGE
+destination:/topic/status
+content-type:application/json
+subscription:dummy2
+message-id:8dee315f-2df6-f9a3-ea19-f96362b782cf-0
+content-length:66
+
+{"username":"dummy2","status":"OFFLINE","timestamp":1734606946251}
+
+___________________________________________________________
+
+>>> Get current status of user dummy2 without subscription
+SUBSCRIBE
+id:dummy2
+destination:/app/current-status
+
+
+
+<<< Answer about the current user status
+MESSAGE
+destination:/app/current-status
+content-type:application/json
+subscription:dummy2
+message-id:8dee315f-2df6-f9a3-ea19-f96362b782cf-1
+content-length:66
+
+{"username":"dummy2","status":"OFFLINE","timestamp":1734606997003}
+
+___________________________________________________________
+
+<<< Response when the status of the subscribed user dummy2 changes
+MESSAGE
+subscription:dummy2
+subscription:dummy2
+destination:/topic/status
+message-id:T_dummy2@@session-pg8Kh6RKBDdc7K9bmvbVlg@@2
+redelivered:false
+content-type:application/json
+content-length:65
+
+{"username":"dummy2","status":"ONLINE","timestamp":1734607162632}
+
+___________________________________________________________
+
+>>> Unsubscribe from dummy2
+UNSUBSCRIBE
+id:dummy2
+
+___________________________________________________________
+
+>>> Close session
+DISCONNECT
