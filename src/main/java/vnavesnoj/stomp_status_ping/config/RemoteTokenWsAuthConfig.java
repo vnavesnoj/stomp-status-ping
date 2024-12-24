@@ -5,7 +5,9 @@
 
 package vnavesnoj.stomp_status_ping.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -42,22 +44,31 @@ public class RemoteTokenWsAuthConfig {
 
     @Bean
     WsAuthenticationInterceptor remoteTokenWsAuthenticationInterceptor(WebClient webClient,
+                                                                       ObjectMapper objectMapper,
                                                                        AuthWebClientProperties webClientProperties) {
         final var matcher = new HeaderWsMessageMatcher(properties.getTokenHeader());
         final var converter = new HeaderWsAuthenticationConverter(
                 properties.getTokenHeader(),
                 OneTimeTokenAuthenticationToken::unauthenticated
         );
+        final var manager = getTokenAuthenticationManager(webClient, objectMapper, webClientProperties);
+        return new WsAuthenticationInterceptor(matcher, converter, manager);
+    }
+
+    private @NotNull TokenAuthenticationManager getTokenAuthenticationManager(WebClient webClient,
+                                                                              ObjectMapper objectMapper,
+                                                                              AuthWebClientProperties webClientProperties) {
         final var authenticationService = new TokenRemoteAuthenticationService(
                 webClient,
+                objectMapper,
                 webClientProperties.getAuthPath(),
                 webClientProperties.getAuthResponseTimeout(),
-                webClientProperties.getTokenHeader()
+                webClientProperties.getTokenHeader(),
+                webClientProperties.getResponseUsernameField()
         );
-        final var manager = new TokenAuthenticationManager(
+        return new TokenAuthenticationManager(
                 authenticationService,
                 defaultAuthorities
         );
-        return new WsAuthenticationInterceptor(matcher, converter, manager);
     }
 }

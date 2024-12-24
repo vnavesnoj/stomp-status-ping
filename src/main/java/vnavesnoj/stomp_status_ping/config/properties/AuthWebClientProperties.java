@@ -18,4 +18,5 @@ public class AuthWebClientProperties {
     int connectTimeout;
     long authResponseTimeout;
     String tokenHeader;
+    String responseUsernameField;
 }
