@@ -27,7 +27,8 @@ public class WsSessionUpdateInterceptor implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         final var messageType = SimpMessageHeaderAccessor.getMessageType(message.getHeaders());
-        if (messageType == SUBSCRIBE || messageType == UNSUBSCRIBE || messageType == HEARTBEAT) {
+        if (messageType != CONNECT && messageType != CONNECT_ACK
+                && messageType != DISCONNECT && messageType != DISCONNECT_ACK) {
             final var sessionId = SimpMessageHeaderAccessor.getSessionId(message.getHeaders());
             //TODO user can be null?
             final var username = Objects.requireNonNull(SimpMessageHeaderAccessor.getUser(message.getHeaders())).getName();
