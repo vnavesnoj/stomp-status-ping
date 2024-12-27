@@ -11,7 +11,8 @@ import vnavesnoj.stomp_status_ping.service.ActiveWsSessionService;
 import vnavesnoj.stomp_status_ping.websocket.UserStatusNotifier;
 import vnavesnoj.stomp_status_ping.websocket.payload.UserStatus;
 
-import java.time.Instant;
+import java.security.Principal;
+import java.util.Optional;
 
 /**
  * @author vnavesnoj
@@ -22,26 +23,27 @@ import java.time.Instant;
 @Component
 public class WebSocketConnectedHandler implements ApplicationListener<SessionConnectedEvent> {
 
-    private final ActiveWsSessionService sessionService;
+    private final ActiveWsSessionService service;
     private final UserStatusNotifier notifier;
 
 
     @Override
     public void onApplicationEvent(SessionConnectedEvent event) {
-        final var username = event.getUser().getName();
+        final var username = Optional.ofNullable(event.getUser())
+                .map(Principal::getName)
+                .orElseThrow(() -> log.throwing(new NullPointerException()));
         final var sessionId = SimpMessageHeaderAccessor.getSessionId(event.getMessage().getHeaders());
-        log.info("New session %s connected by %s".formatted(sessionId, username));
-        //TODO wih count() method
-        final var isFirstSession = sessionService.findAllByUsername(username).isEmpty();
-        final var session = new ActiveWsSessionCreateDto(
-                username,
-                sessionId,
-                Instant.ofEpochMilli(event.getTimestamp())
-        );
-        final var savedSession = sessionService.create(session);
-        log.debug("New session saved: %s".formatted(savedSession));
-        if (isFirstSession) {
-            notifier.sendToSubscribers(username, UserStatus.ONLINE, event.getTimestamp());
+        log.info("New session {} connected by {}", sessionId, username);
+        //TODO with count() method
+        final var entityExistsResponse = service.existsByUsername(username);
+        final var newSession = new ActiveWsSessionCreateDto(username, sessionId, entityExistsResponse.getInstant());
+        final var createdSession = service.create(newSession);
+        if (!entityExistsResponse.isExists()) {
+            notifier.sendToSubscribers(
+                    createdSession.getUsername(),
+                    UserStatus.ONLINE,
+                    entityExistsResponse.getInstant().toEpochMilli()
+            );
         }
     }
 }
