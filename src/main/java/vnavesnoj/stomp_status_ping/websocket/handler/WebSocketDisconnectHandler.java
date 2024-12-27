@@ -1,4 +1,4 @@
-package vnavesnoj.stomp_status_ping.websocket;
+package vnavesnoj.stomp_status_ping.websocket.handler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import vnavesnoj.stomp_status_ping.service.ActiveWsSessionService;
+import vnavesnoj.stomp_status_ping.websocket.UserStatusNotifier;
 import vnavesnoj.stomp_status_ping.websocket.payload.UserStatus;
 
 import java.util.Objects;
@@ -17,7 +18,7 @@ import java.util.Objects;
 @Log4j2
 @RequiredArgsConstructor
 @Component
-public class WebSocketDisconnectEvent implements ApplicationListener<SessionDisconnectEvent> {
+public class WebSocketDisconnectHandler implements ApplicationListener<SessionDisconnectEvent> {
 
     private final ActiveWsSessionService service;
     private final UserStatusNotifier notifier;
@@ -34,8 +35,9 @@ public class WebSocketDisconnectEvent implements ApplicationListener<SessionDisc
         if (!service.delete(sessionId)) {
             sendToSubscribersOfflineStatus(username, event.getTimestamp());
         } else {
-            if (service.findAllByUsername(username).isEmpty()) {
-                sendToSubscribersOfflineStatus(username, event.getTimestamp());
+            final var entityExistsResponse = service.existsByUsername(username);
+            if (!entityExistsResponse.isExists()) {
+                sendToSubscribersOfflineStatus(username, entityExistsResponse.getInstant().toEpochMilli());
             }
         }
     }

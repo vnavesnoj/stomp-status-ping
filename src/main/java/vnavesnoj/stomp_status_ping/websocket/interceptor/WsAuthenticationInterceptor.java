@@ -3,7 +3,7 @@
  * @mail vnavesnoj@gmail.com
  */
 
-package vnavesnoj.stomp_status_ping.websocket;
+package vnavesnoj.stomp_status_ping.websocket.interceptor;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.Message;

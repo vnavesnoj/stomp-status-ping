@@ -20,7 +20,7 @@ import vnavesnoj.stomp_status_ping.security.HeaderWsAuthenticationConverter;
 import vnavesnoj.stomp_status_ping.security.HeaderWsMessageMatcher;
 import vnavesnoj.stomp_status_ping.security.TokenAuthenticationManager;
 import vnavesnoj.stomp_status_ping.service.TokenPropertiesAuthenticationService;
-import vnavesnoj.stomp_status_ping.websocket.WsAuthenticationInterceptor;
+import vnavesnoj.stomp_status_ping.websocket.interceptor.WsAuthenticationInterceptor;
 
 import java.util.Collections;
 import java.util.List;

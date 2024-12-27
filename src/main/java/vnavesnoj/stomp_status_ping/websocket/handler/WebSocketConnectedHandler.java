@@ -1,4 +1,4 @@
-package vnavesnoj.stomp_status_ping.websocket;
+package vnavesnoj.stomp_status_ping.websocket.handler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionCreateDto;
 import vnavesnoj.stomp_status_ping.service.ActiveWsSessionService;
+import vnavesnoj.stomp_status_ping.websocket.UserStatusNotifier;
 import vnavesnoj.stomp_status_ping.websocket.payload.UserStatus;
 
 import java.time.Instant;

@@ -1,4 +1,4 @@
-package vnavesnoj.stomp_status_ping.websocket;
+package vnavesnoj.stomp_status_ping.websocket.interceptor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
