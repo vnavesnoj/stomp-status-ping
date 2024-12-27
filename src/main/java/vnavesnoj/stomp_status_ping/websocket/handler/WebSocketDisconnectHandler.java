@@ -9,7 +9,8 @@ import vnavesnoj.stomp_status_ping.service.ActiveWsSessionService;
 import vnavesnoj.stomp_status_ping.websocket.UserStatusNotifier;
 import vnavesnoj.stomp_status_ping.websocket.payload.UserStatus;
 
-import java.util.Objects;
+import java.security.Principal;
+import java.util.Optional;
 
 /**
  * @author vnavesnoj
@@ -25,24 +26,20 @@ public class WebSocketDisconnectHandler implements ApplicationListener<SessionDi
 
     @Override
     public void onApplicationEvent(SessionDisconnectEvent event) {
-        //TODO user can be null (not authenticated)
-        final var username = Objects.requireNonNull(event.getUser()).getName();
         final var sessionId = event.getSessionId();
-        log.info("Session %s disconnected with status %s".formatted(
-                username + ":" + sessionId, event.getCloseStatus()
-        ));
-        //TODO reverse
-        if (!service.delete(sessionId)) {
-            sendToSubscribersOfflineStatus(username, event.getTimestamp());
-        } else {
+        log.info("Session {} disconnected with status {}", sessionId, event.getCloseStatus());
+        final var username = Optional.ofNullable(event.getUser())
+                .map(Principal::getName)
+                .orElseThrow(null);
+        if (username != null) {
             final var entityExistsResponse = service.existsByUsername(username);
-            if (!entityExistsResponse.isExists()) {
-                sendToSubscribersOfflineStatus(username, entityExistsResponse.getInstant().toEpochMilli());
+            if (entityExistsResponse.isExists()) {
+                service.delete(sessionId);
+            }
+            if (!entityExistsResponse.isExists() && entityExistsResponse.isSingle()) {
+                notifier.sendToSubscribers(username, UserStatus.OFFLINE, entityExistsResponse.getInstant().toEpochMilli());
             }
         }
-    }
 
-    private void sendToSubscribersOfflineStatus(String username, Long timestamp) {
-        notifier.sendToSubscribers(username, UserStatus.OFFLINE, timestamp);
     }
 }

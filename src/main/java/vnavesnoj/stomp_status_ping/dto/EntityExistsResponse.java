@@ -12,5 +12,6 @@ import java.time.Instant;
 public class EntityExistsResponse {
 
     boolean exists;
+    boolean single;
     Instant instant;
 }
