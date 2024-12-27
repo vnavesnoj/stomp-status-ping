@@ -20,9 +20,9 @@ public class ActiveWsSessionCreateMapper implements Mapper<ActiveWsSessionCreate
 
     @Override
     public ActiveWsSession map(ActiveWsSessionCreateDto object) {
-        return ActiveWsSession.of(
-                object.getUsername(),
+        return new ActiveWsSession(
                 object.getSessionId(),
+                object.getUsername(),
                 object.getConnectionTime().getEpochSecond(),
                 object.getConnectionTime().getEpochSecond(),
                 entityTtl

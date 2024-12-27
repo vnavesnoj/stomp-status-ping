@@ -6,7 +6,6 @@ import vnavesnoj.stomp_status_ping.config.properties.ActiveWsSessionEntityProper
 import vnavesnoj.stomp_status_ping.data.ActiveWsSession;
 import vnavesnoj.stomp_status_ping.data.ActiveWsSessionRepository;
 import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionCreateDto;
-import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionDeletedDto;
 import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionReadDto;
 import vnavesnoj.stomp_status_ping.mapper.Mapper;
 
@@ -38,8 +37,8 @@ public class ActiveWsSessionServiceImpl implements ActiveWsSessionService {
     }
 
     @Override
-    public Optional<ActiveWsSessionReadDto> findByUsernameAndSessionId(String username, String sessionId) {
-        return repository.findById(getId(username, sessionId))
+    public Optional<ActiveWsSessionReadDto> findBySessionId(String sessionId) {
+        return repository.findById(sessionId)
                 .map(readMapper::map);
     }
 
@@ -62,8 +61,8 @@ public class ActiveWsSessionServiceImpl implements ActiveWsSessionService {
 
     @Transactional
     @Override
-    public Optional<ActiveWsSessionReadDto> updateLastAccessedTime(String username, String sessionId) {
-        return repository.findById(getId(username, sessionId))
+    public Optional<ActiveWsSessionReadDto> updateLastAccessedTime(String sessionId) {
+        return repository.findById(sessionId)
                 .map(item -> {
                     item.setLastAccessedTime(Instant.now().getEpochSecond());
                     item.setTtl(entityTtl);
@@ -75,33 +74,12 @@ public class ActiveWsSessionServiceImpl implements ActiveWsSessionService {
 
     @Transactional
     @Override
-    public boolean delete(String username, String sessionId) {
-        return repository.findById(getId(username, sessionId))
+    public boolean delete(String sessionId) {
+        return repository.findById(sessionId)
                 .map(item -> {
                     repository.delete(item);
                     return true;
                 })
                 .orElse(false);
-    }
-
-    @Transactional
-    @Override
-    public Optional<ActiveWsSessionDeletedDto> deleteWithResponse(String username, String sessionId) {
-        return repository.findById(getId(username, sessionId))
-                .map(item -> {
-                    repository.delete(item);
-                    return item;
-                })
-                .map(readMapper::map)
-                .map(item ->
-                        {
-                            final var sessions = repository.findAllByUsername(username);
-                            return new ActiveWsSessionDeletedDto(item, sessions == null || sessions.isEmpty());
-                        }
-                );
-    }
-
-    private String getId(String username, String sessionId) {
-        return username + ActiveWsSession.ID_DELIMITER + sessionId;
     }
 }

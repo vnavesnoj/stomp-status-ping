@@ -20,7 +20,7 @@ public class ActiveWsSessionReadMapper implements Mapper<ActiveWsSession, Active
     public ActiveWsSessionReadDto map(ActiveWsSession object) {
         return new ActiveWsSessionReadDto(
                 object.getUsername(),
-                object.getSessionId(),
+                object.getId(),
                 Instant.ofEpochSecond(object.getConnectionTime()),
                 Instant.ofEpochSecond(object.getLastAccessedTime()),
                 Duration.ofSeconds(object.getTtl())

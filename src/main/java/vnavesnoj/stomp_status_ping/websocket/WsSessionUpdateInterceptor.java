@@ -33,8 +33,7 @@ public class WsSessionUpdateInterceptor implements ChannelInterceptor {
             //TODO user can be null?
             final var username = Objects.requireNonNull(SimpMessageHeaderAccessor.getUser(message.getHeaders())).getName();
             log.debug("Receive a message with a type %s from %s with session = %s".formatted(messageType, username, sessionId));
-            service.findByUsernameAndSessionId(username, sessionId)
-                    .flatMap(item -> service.updateLastAccessedTime(username, sessionId))
+                    service.updateLastAccessedTime(sessionId)
                     .ifPresent(updated -> log.debug("Last accessed time updated. Session: %s".formatted(updated.getSessionId())));
         }
         return ChannelInterceptor.super.preSend(message, channel);
