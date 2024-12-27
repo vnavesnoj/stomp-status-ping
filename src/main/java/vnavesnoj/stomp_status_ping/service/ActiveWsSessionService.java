@@ -3,6 +3,7 @@ package vnavesnoj.stomp_status_ping.service;
 
 import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionCreateDto;
 import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionReadDto;
+import vnavesnoj.stomp_status_ping.dto.EntityExistsResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,8 @@ public interface ActiveWsSessionService {
     Optional<ActiveWsSessionReadDto> findBySessionId(String sessionId);
 
     List<ActiveWsSessionReadDto> findAllByUsername(String username);
+
+    EntityExistsResponse existsByUsername(String username);
 
     ActiveWsSessionReadDto create(ActiveWsSessionCreateDto session);
 
