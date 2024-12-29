@@ -1,4 +1,4 @@
-package vnavesnoj.stomp_status_ping.websocket;
+package vnavesnoj.stomp_status_ping.websocket.handler.component;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

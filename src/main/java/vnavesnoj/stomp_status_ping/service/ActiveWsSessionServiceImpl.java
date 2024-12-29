@@ -52,8 +52,10 @@ public class ActiveWsSessionServiceImpl implements ActiveWsSessionService {
 
     @Override
     public EntityExistsResponse existsByUsername(String username) {
+        final var allByUsername = repository.findAllByUsername(username);
         return new EntityExistsResponse(
-                !repository.findAllByUsername(username).isEmpty(),
+                !allByUsername.isEmpty(),
+                allByUsername.size() == 1,
                 Instant.now()
         );
     }

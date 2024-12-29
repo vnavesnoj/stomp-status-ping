@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import vnavesnoj.stomp_status_ping.service.ActiveWsSessionService;
-import vnavesnoj.stomp_status_ping.websocket.UserStatusNotifier;
+import vnavesnoj.stomp_status_ping.websocket.handler.component.UserStatusNotifier;
 import vnavesnoj.stomp_status_ping.websocket.payload.UserStatus;
 
 import java.security.Principal;
@@ -30,7 +30,7 @@ public class WebSocketDisconnectHandler implements ApplicationListener<SessionDi
         log.info("Session {} disconnected with status {}", sessionId, event.getCloseStatus());
         final var username = Optional.ofNullable(event.getUser())
                 .map(Principal::getName)
-                .orElseThrow(null);
+                .orElse(null);
         if (username != null) {
             final var entityExistsResponse = service.existsByUsername(username);
             if (entityExistsResponse.isExists()) {
@@ -40,6 +40,5 @@ public class WebSocketDisconnectHandler implements ApplicationListener<SessionDi
                 notifier.sendToSubscribers(username, UserStatus.OFFLINE, entityExistsResponse.getInstant().toEpochMilli());
             }
         }
-
     }
 }

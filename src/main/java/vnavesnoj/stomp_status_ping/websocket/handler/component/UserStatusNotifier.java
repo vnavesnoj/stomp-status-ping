@@ -1,4 +1,4 @@
-package vnavesnoj.stomp_status_ping.websocket;
+package vnavesnoj.stomp_status_ping.websocket.handler.component;
 
 import vnavesnoj.stomp_status_ping.websocket.payload.UserStatus;
 
