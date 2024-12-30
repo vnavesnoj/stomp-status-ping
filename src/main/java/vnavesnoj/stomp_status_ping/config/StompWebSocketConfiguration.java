@@ -20,6 +20,7 @@ import vnavesnoj.stomp_status_ping.config.properties.AppStompDestinationProperti
 import vnavesnoj.stomp_status_ping.config.properties.BrokerDestinationProperties;
 import vnavesnoj.stomp_status_ping.config.properties.ExternalBrokerProperties;
 import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
+import vnavesnoj.stomp_status_ping.websocket.handler.StompErrorHandler;
 import vnavesnoj.stomp_status_ping.websocket.interceptor.NoopChannelInterceptor;
 import vnavesnoj.stomp_status_ping.websocket.interceptor.WsAuthenticationInterceptor;
 import vnavesnoj.stomp_status_ping.websocket.interceptor.WsSessionRelevanceMatcherInterceptor;
@@ -69,6 +70,7 @@ public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfig
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint(wsProperties.getEndpoints())
                 .setAllowedOrigins(wsProperties.getOrigins());
+        registry.setErrorHandler(new StompErrorHandler());
     }
 
     @Override
