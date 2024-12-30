@@ -59,7 +59,7 @@ public class WsConnectionTest {
         List<Transport> transports = new ArrayList<>(2);
         transports.add(new WebSocketTransport(new StandardWebSocketClient()));
         transports.add(new RestTemplateXhrTransport());
-        new StompSessionHandler();
+        new TestStompSessionHandler();
         sockJsClient = new SockJsClient(transports);
     }
 
@@ -95,7 +95,7 @@ public class WsConnectionTest {
         final var httpHeaders = new WebSocketHttpHeaders();
 //        httpHeaders.add(properties.getPrincipalHeader(), principal);
         final var uri = new URI("ws://localhost:" + this.port + properties.getEndpoints()[0]);
-        return new WebSocketStompClient(sockJsClient).connectAsync(uri.toString(), httpHeaders, new StompSessionHandler());
+        return new WebSocketStompClient(sockJsClient).connectAsync(uri.toString(), httpHeaders, new TestStompSessionHandler());
     }
 
     @TestConfiguration

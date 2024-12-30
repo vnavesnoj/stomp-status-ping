@@ -6,5 +6,5 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
  * @author vnavesnoj
  * @mail vnavesnoj@gmail.com
  */
-public class StompSessionHandler extends StompSessionHandlerAdapter {
+public class TestStompSessionHandler extends StompSessionHandlerAdapter {
 }

@@ -14,12 +14,15 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
+import org.springframework.web.socket.handler.ExceptionWebSocketHandlerDecorator;
 import vnavesnoj.stomp_status_ping.config.properties.AppStompDestinationProperties;
 import vnavesnoj.stomp_status_ping.config.properties.BrokerDestinationProperties;
 import vnavesnoj.stomp_status_ping.config.properties.ExternalBrokerProperties;
 import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
 import vnavesnoj.stomp_status_ping.websocket.interceptor.NoopChannelInterceptor;
 import vnavesnoj.stomp_status_ping.websocket.interceptor.WsAuthenticationInterceptor;
+import vnavesnoj.stomp_status_ping.websocket.interceptor.WsSessionRelevanceMatcherInterceptor;
 
 /**
  * @author vnavesnoj
@@ -43,13 +46,14 @@ public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfig
     private final ExternalBrokerProperties externalBrokerProperties;
     private final ChannelInterceptor wsSessionUpdateInterceptor;
     private final WsAuthenticationInterceptor wsAuthenticationInterceptor;
+    private final WsSessionRelevanceMatcherInterceptor relevanceMatcherInterceptor;
     private final TaskScheduler messageBrokerTaskScheduler;
 
     public StompWebSocketConfiguration(StompWebSocketProperties wsProperties,
                                        BrokerDestinationProperties brokerProperties,
                                        AppStompDestinationProperties appStompProperties, ExternalBrokerProperties externalBrokerProperties,
                                        ChannelInterceptor wsSessionUpdateInterceptor,
-                                       WsAuthenticationInterceptor wsAuthenticationInterceptor,
+                                       WsAuthenticationInterceptor wsAuthenticationInterceptor, WsSessionRelevanceMatcherInterceptor relevanceMatcherInterceptor,
                                        @Lazy TaskScheduler messageBrokerTaskScheduler) {
         this.wsProperties = wsProperties;
         this.brokerProperties = brokerProperties;
@@ -57,6 +61,7 @@ public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfig
         this.externalBrokerProperties = externalBrokerProperties;
         this.wsSessionUpdateInterceptor = wsSessionUpdateInterceptor;
         this.wsAuthenticationInterceptor = wsAuthenticationInterceptor;
+        this.relevanceMatcherInterceptor = relevanceMatcherInterceptor;
         this.messageBrokerTaskScheduler = messageBrokerTaskScheduler;
     }
 
@@ -96,6 +101,18 @@ public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfig
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(wsAuthenticationInterceptor, wsSessionUpdateInterceptor);
         WebSocketMessageBrokerConfigurer.super.configureClientInboundChannel(registration);
+    }
+
+    @Override
+    public void configureClientOutboundChannel(ChannelRegistration registration) {
+        registration.interceptors(relevanceMatcherInterceptor);
+        WebSocketMessageBrokerConfigurer.super.configureClientOutboundChannel(registration);
+    }
+
+    @Override
+    public void configureWebSocketTransport(WebSocketTransportRegistration registry) {
+        registry.addDecoratorFactory(ExceptionWebSocketHandlerDecorator::new);
+        WebSocketMessageBrokerConfigurer.super.configureWebSocketTransport(registry);
     }
 
     @Bean("csrfChannelInterceptor")
