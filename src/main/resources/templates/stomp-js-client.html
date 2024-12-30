@@ -123,8 +123,13 @@
     }
 
     function onError(error) {
-        logMessage('Error: ' + error);
+        if (error.headers && error.headers['message']) {
+            logMessage('Error: ' + error.headers['message']);
+        } else {
+            logMessage('Error: ' + error);
+        }
     }
+
 
     function logMessage(message) {
         const logOutput = document.getElementById('log-output');
