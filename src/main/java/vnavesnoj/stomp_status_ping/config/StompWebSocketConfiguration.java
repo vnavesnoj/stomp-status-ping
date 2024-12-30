@@ -49,13 +49,14 @@ public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfig
     private final WsAuthenticationInterceptor wsAuthenticationInterceptor;
     private final WsSessionRelevanceMatcherInterceptor relevanceMatcherInterceptor;
     private final TaskScheduler messageBrokerTaskScheduler;
+    private final WsSessionRelevanceMatcherInterceptor wsSessionRelevanceMatcherInterceptor;
 
     public StompWebSocketConfiguration(StompWebSocketProperties wsProperties,
                                        BrokerDestinationProperties brokerProperties,
                                        AppStompDestinationProperties appStompProperties, ExternalBrokerProperties externalBrokerProperties,
                                        ChannelInterceptor wsSessionUpdateInterceptor,
                                        WsAuthenticationInterceptor wsAuthenticationInterceptor, WsSessionRelevanceMatcherInterceptor relevanceMatcherInterceptor,
-                                       @Lazy TaskScheduler messageBrokerTaskScheduler) {
+                                       @Lazy TaskScheduler messageBrokerTaskScheduler, WsSessionRelevanceMatcherInterceptor wsSessionRelevanceMatcherInterceptor) {
         this.wsProperties = wsProperties;
         this.brokerProperties = brokerProperties;
         this.appStompProperties = appStompProperties;
@@ -64,6 +65,7 @@ public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfig
         this.wsAuthenticationInterceptor = wsAuthenticationInterceptor;
         this.relevanceMatcherInterceptor = relevanceMatcherInterceptor;
         this.messageBrokerTaskScheduler = messageBrokerTaskScheduler;
+        this.wsSessionRelevanceMatcherInterceptor = wsSessionRelevanceMatcherInterceptor;
     }
 
     @Override
@@ -101,7 +103,11 @@ public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfig
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(wsAuthenticationInterceptor, wsSessionUpdateInterceptor);
+        registration.interceptors(
+                wsAuthenticationInterceptor,
+                wsSessionRelevanceMatcherInterceptor,
+                wsSessionUpdateInterceptor
+        );
         WebSocketMessageBrokerConfigurer.super.configureClientInboundChannel(registration);
     }
 
