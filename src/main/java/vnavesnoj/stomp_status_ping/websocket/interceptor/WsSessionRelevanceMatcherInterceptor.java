@@ -33,7 +33,7 @@ public class WsSessionRelevanceMatcherInterceptor implements ChannelInterceptor,
             .concurrencyLevel(1)
             .expireAfterWrite(10L, TimeUnit.MINUTES)
             .build();
-    public static final String ERROR_MESSAGE = "Session expired";
+    public static final String ERROR_MESSAGE = "Session expired.";
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -42,6 +42,7 @@ public class WsSessionRelevanceMatcherInterceptor implements ChannelInterceptor,
                 .map(SimpMessageHeaderAccessor::getSessionId)
                 .map(expiredSessions::getIfPresent)
                 .map(item -> {
+                    //TODO remove error message creating to the error handler?
                     expiredSessions.invalidate(item.getSessionId());
                     final var accessor = StompHeaderAccessor.create(StompCommand.ERROR);
                     accessor.setSessionId(item.getSessionId());

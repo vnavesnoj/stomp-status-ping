@@ -7,9 +7,10 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
+import vnavesnoj.stomp_status_ping.exception.InvalidSessionToUpdateException;
 import vnavesnoj.stomp_status_ping.service.ActiveWsSessionService;
 
-import java.util.Objects;
+import java.util.Optional;
 
 import static org.springframework.messaging.simp.SimpMessageType.*;
 
@@ -29,12 +30,16 @@ public class WsSessionUpdateInterceptor implements ChannelInterceptor {
         final var messageType = SimpMessageHeaderAccessor.getMessageType(message.getHeaders());
         if (messageType != CONNECT && messageType != CONNECT_ACK
                 && messageType != DISCONNECT && messageType != DISCONNECT_ACK) {
-            final var sessionId = SimpMessageHeaderAccessor.getSessionId(message.getHeaders());
-            //TODO user can be null?
-            final var username = Objects.requireNonNull(SimpMessageHeaderAccessor.getUser(message.getHeaders())).getName();
-            log.debug("Receive a message with a type %s from %s with session = %s".formatted(messageType, username, sessionId));
-                    service.updateLastAccessedTime(sessionId)
-                    .ifPresent(updated -> log.debug("Last accessed time updated. Session: %s".formatted(updated.getSessionId())));
+            final var updatedSession = Optional.of(message)
+                    .map(Message::getHeaders)
+                    .map(SimpMessageHeaderAccessor::getSessionId)
+                    .flatMap(service::updateLastAccessedTime)
+                    .orElseThrow(
+                            () -> log.throwing(
+                                    new InvalidSessionToUpdateException("Could not update session last accessed time.")
+                            )
+                    );
+            log.debug("Last accessed time updated. Session: {}", updatedSession.getSessionId());
         }
         return ChannelInterceptor.super.preSend(message, channel);
     }
