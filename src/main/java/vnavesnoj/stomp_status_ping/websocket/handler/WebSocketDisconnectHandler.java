@@ -10,6 +10,7 @@ import vnavesnoj.stomp_status_ping.websocket.handler.component.UserStatusNotifie
 import vnavesnoj.stomp_status_ping.websocket.payload.UserStatus;
 
 import java.security.Principal;
+import java.time.Instant;
 import java.util.Optional;
 
 /**
@@ -32,12 +33,9 @@ public class WebSocketDisconnectHandler implements ApplicationListener<SessionDi
                 .map(Principal::getName)
                 .orElse(null);
         if (username != null) {
-            final var entityExistsResponse = service.existsByUsername(username);
-            if (entityExistsResponse.isExists()) {
-                service.delete(sessionId);
-            }
-            if (entityExistsResponse.isExists() && entityExistsResponse.isSingle()) {
-                notifier.sendToSubscribers(username, UserStatus.OFFLINE, entityExistsResponse.getInstant().toEpochMilli());
+            service.delete(sessionId);
+            if (!service.existsByUsername(username)) {
+                notifier.sendToSubscribers(username, UserStatus.OFFLINE, Instant.now().toEpochMilli());
             }
         }
     }
