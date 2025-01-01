@@ -6,7 +6,9 @@ The service is horizontally scalable.
 * Users communicate with the service via a websocket
 client based on the STOMP protocol.
 * Default connection endpoint: `/stomp`
-* Schema with basic commands: [schema.txt](schema.txt)
+* [schema.txt](schema.txt) - schema with basic commands.
+* [src/main/resources/application.yaml](src/main/resources/application.yaml) - application properties to configure 
+(example: from environment variables).
 
 ### Requirements
 * Redis.
@@ -14,10 +16,11 @@ client based on the STOMP protocol.
 * Authentication service.
 
 ### Local-build
-* `docker-compose-localbuild.yaml` - run the application with a test page and with:
+* `docker compose -f ./docker-compose-localbuild.yaml up` - 
+run the application with a test page and with:
   - test local authentication service;
   - local Redis;
   - local RabbitMq.
-* `/test/stomp-js-client` - default testing page endpoint
+* `/test/stomp-js-client` - default testing page endpoint.
 * [src/main/resources/tokens.properties](src/main/resources/tokens.properties) -
 test tokens with their owners.
