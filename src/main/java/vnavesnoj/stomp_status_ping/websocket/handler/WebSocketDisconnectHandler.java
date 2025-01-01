@@ -36,7 +36,7 @@ public class WebSocketDisconnectHandler implements ApplicationListener<SessionDi
             if (entityExistsResponse.isExists()) {
                 service.delete(sessionId);
             }
-            if (!entityExistsResponse.isExists() && entityExistsResponse.isSingle()) {
+            if (entityExistsResponse.isExists() && entityExistsResponse.isSingle()) {
                 notifier.sendToSubscribers(username, UserStatus.OFFLINE, entityExistsResponse.getInstant().toEpochMilli());
             }
         }

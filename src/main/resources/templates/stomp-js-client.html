@@ -99,8 +99,9 @@
         const username = document.getElementById("message-input").value;
         const headers = {id: username};
         stompClient.subscribe(brokerUserStatusDestination, function (message) {
-            logMessage('Subscribed to the ' + username + '. Received message: ' + message.body);
+            logMessage('Received message: ' + message.body);
         }, headers);
+        logMessage('Subscribed to the ' + username);
     }
 
     function getCurrentStatus() {
