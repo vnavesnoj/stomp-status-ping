@@ -33,15 +33,15 @@ public class WebSocketConnectedHandler implements ApplicationListener<SessionCon
         .orElseThrow(() -> log.throwing(new NullPointerException()));
     final var sessionId = SimpMessageHeaderAccessor.getSessionId(event.getMessage().getHeaders());
     log.info("New session {} connected by {}", sessionId, username);
-    // TODO with count() method
-    final var entityExistsResponse = service.existsByUsername(username);
-    final var newSession = new ActiveWsSessionCreateDto(username, sessionId, entityExistsResponse.getInstant());
+    final var sessionExistsBefore = service.existsByUsername(username);
+    final var newSession = new ActiveWsSessionCreateDto(username, sessionId);
     final var createdSession = service.create(newSession);
-    if (!entityExistsResponse.isExists()) {
+    if (!sessionExistsBefore) {
       notifier.sendToSubscribers(
           createdSession.getUsername(),
           UserStatus.ONLINE,
-          entityExistsResponse.getInstant().toEpochMilli());
+          createdSession.getConnectionTime().toEpochMilli()
+      );
     }
   }
 }

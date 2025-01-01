@@ -7,7 +7,6 @@ import vnavesnoj.stomp_status_ping.data.ActiveWsSession;
 import vnavesnoj.stomp_status_ping.data.ActiveWsSessionRepository;
 import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionCreateDto;
 import vnavesnoj.stomp_status_ping.dto.ActiveWsSessionReadDto;
-import vnavesnoj.stomp_status_ping.dto.EntityExistsResponse;
 import vnavesnoj.stomp_status_ping.mapper.Mapper;
 
 import java.time.Instant;
@@ -51,13 +50,8 @@ public class ActiveWsSessionServiceImpl implements ActiveWsSessionService {
     }
 
     @Override
-    public EntityExistsResponse existsByUsername(String username) {
-        final var allByUsername = repository.findAllByUsername(username);
-        return new EntityExistsResponse(
-                !allByUsername.isEmpty(),
-                allByUsername.size() == 1,
-                Instant.now()
-        );
+    public boolean existsByUsername(String username) {
+        return !repository.findAllByUsername(username).isEmpty();
     }
 
     @Transactional
