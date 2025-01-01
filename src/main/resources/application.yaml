@@ -18,21 +18,21 @@ spring:
 
 app:
   testing-page:
-    enabled: ${APP_TESTING_PAGE_ENABLED:false}
-    stomp-url: "ws://localhost:8080/stomp"
+    enabled: ${APP_TESTING_PAGE_ENABLED:false} # create endpoint to the testing page with a stomp client
+    stomp-url: "ws://localhost:8080/stomp" # endpoint for websocket connections in the testing page. See: app.websocket.stomp.server.endpoints
   websocket:
     stomp:
       server:
-        endpoints: ${APP_STOMP_ENDPOINT:/stomp}
+        endpoints: ${APP_STOMP_ENDPOINT:/stomp} # endpoint for websocket connections to the application
         origins: "*"
         server-heartbeat: ${APP_SERVER_HEARTBEAT:10000}
         client-heartbeat: ${APP_CLIENT_HEARTBEAT:10000}
         destination:
           prefix: "/app"
-          current-user-status: "/current-status"
+          current-user-status: "/current-status" # stomp destination for retrieving user status without subscribing in the broker. Default: /app/current-status
       broker:
         external:
-          enabled: ${APP_BROKER_ENABLED:false}
+          enabled: ${APP_BROKER_ENABLED:true} # if true app will use an external broker. Otherwise, app will use an in-memory broker
           virtual-host: /
           relay-host: ${APP_BROKER_RELAY_HOST:localhost}
           relay-port: ${APP_BROKER_RELAY_PORT:61613}
@@ -44,9 +44,9 @@ app:
           heartbeat-receive-interval: 10000
         destination:
           prefix: "/topic"
-          user-status: "/status"
+          user-status: "/status" # stomp destination to subscribe to user status changing. Default: /topic/status
       auth:
-        local: ${APP_AUTH_LOCAL:false}
+        local: ${APP_AUTH_LOCAL:false} # if false app will use external authentication service. See: app.webclient.auth
         username-header: ${APP_AUTH_USERNAME_HEADER:username}
         token-header: ${APP_AUTH_TOKEN_HEADER:token}
   webclient:
@@ -58,7 +58,7 @@ app:
       auth-path: ${APP_AUTH_REMOTE_AUTH_PATH:/auth/chatAuth}
       auth-response-timeout: 5000
       token-header: ${APP_AUTH_REMOTE_TOKEN_HEADER:Authorization}
-      response-username-field: "nickname"
+      response-username-field: "nickname" # username path in json response from auth service. Example: outerField/../username. Default: nickname
 
   redis:
     entity:
