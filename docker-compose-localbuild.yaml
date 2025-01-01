@@ -14,8 +14,11 @@ services:
     ports:
       - '15672:15672'
       - '61613:61613'
+    networks:
+      - app_network
 
   stomp-status-ping:
+    image: stomp-status-ping:0.3.0
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -28,6 +31,7 @@ services:
       - app.testing-page.stomp-url=ws://localhost:8080/stomp
       - APP_AUTH_LOCAL=true
       - REDIS_HOST=redis
+      - APP_BROKER_RELAY_HOST=rabbitmq
 
 networks:
   app_network:
