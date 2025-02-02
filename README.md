@@ -22,5 +22,8 @@ run the application with a test page and with:
   - local Redis;
   - local RabbitMq.
 * `/test/stomp-js-client` - default testing page endpoint.
+* `/test/stomp-js-client-with-cookie` - default testing page endpoint 
+with cookie authentication. `?cookie=cookieName=cookieValue` 
+for setting dynamic cookie from the param.
 * [src/main/resources/tokens.properties](src/main/resources/tokens.properties) -
 test tokens with their owners.
