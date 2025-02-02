@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import vnavesnoj.stomp_status_ping.config.properties.AppStompDestinationProperties;
 import vnavesnoj.stomp_status_ping.config.properties.BrokerDestinationProperties;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 /**
  * @author vnavesnoj
  * @mail vnavesnoj@gmail.com
@@ -44,14 +47,14 @@ public class TestStompJsClientController {
     @RequestMapping("/stomp-js-client-with-cookie")
     public String stompJsClientWithCookie(Model model,
                                           @RequestParam("cookie") String cookie,
-                                          HttpServletResponse response) {
+                                          HttpServletResponse response) throws URISyntaxException {
         model.addAttribute("stompUrl", stompUrl);
         model.addAttribute("brokerUserStatusDestination", brokerUserStatusDestination);
         model.addAttribute("appUserStatusDestination", appUserStatusDestination);
         final var splited = cookie.split("=");
         if (splited.length == 2) {
             final var cookieObj = new Cookie(splited[0], splited[1]);
-            cookieObj.setPath("/stomp");
+            cookieObj.setPath(new URI(stompUrl).getPath());
             cookieObj.setHttpOnly(true);
             response.addCookie(cookieObj);
         }
