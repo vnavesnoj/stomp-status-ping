@@ -13,6 +13,7 @@ import vnavesnoj.stomp_status_ping.config.properties.BrokerDestinationProperties
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 /**
  * @author vnavesnoj
@@ -46,18 +47,25 @@ public class TestStompJsClientController {
 
     @RequestMapping("/stomp-js-client-with-cookie")
     public String stompJsClientWithCookie(Model model,
-                                          @RequestParam("cookie") String cookie,
-                                          HttpServletResponse response) throws URISyntaxException {
+                                          @RequestParam(value = "cookie", required = false) String cookie,
+                                          HttpServletResponse response) {
         model.addAttribute("stompUrl", stompUrl);
         model.addAttribute("brokerUserStatusDestination", brokerUserStatusDestination);
         model.addAttribute("appUserStatusDestination", appUserStatusDestination);
-        final var splited = cookie.split("=");
-        if (splited.length == 2) {
-            final var cookieObj = new Cookie(splited[0], splited[1]);
-            cookieObj.setPath(new URI(stompUrl).getPath());
-            cookieObj.setHttpOnly(true);
-            response.addCookie(cookieObj);
-        }
+        Optional.ofNullable(cookie)
+                .map(item -> item.split("="))
+                .filter(item -> item.length == 2)
+                .map(item -> {
+                    final var cookieObj = new Cookie(item[0], item[1]);
+                    try {
+                        cookieObj.setPath(new URI(stompUrl).getPath());
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException(e);
+                    }
+                    cookieObj.setHttpOnly(true);
+                    return cookieObj;
+                })
+                .ifPresent(response::addCookie);
         return "stomp-js-client-with-cookie";
     }
 }
