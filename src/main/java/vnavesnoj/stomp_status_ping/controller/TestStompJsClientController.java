@@ -34,7 +34,7 @@ public class TestStompJsClientController {
 
 
     @RequestMapping("/stomp-js-client")
-    public String sockJsClientLocalAuth(Model model) {
+    public String stompJsClient(Model model) {
         model.addAttribute("stompUrl", stompUrl);
         model.addAttribute("brokerUserStatusDestination", brokerUserStatusDestination);
         model.addAttribute("appUserStatusDestination", appUserStatusDestination);
