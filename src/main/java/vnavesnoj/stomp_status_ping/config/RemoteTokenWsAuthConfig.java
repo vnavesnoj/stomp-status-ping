@@ -7,11 +7,11 @@ package vnavesnoj.stomp_status_ping.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ott.OneTimeTokenAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -51,14 +51,15 @@ public class RemoteTokenWsAuthConfig {
                 properties.getTokenHeader(),
                 OneTimeTokenAuthenticationToken::unauthenticated
         );
-        final var manager = getTokenAuthenticationManager(webClient, objectMapper, webClientProperties);
+        final var manager = authenticationManager(webClient, objectMapper, webClientProperties);
         return new WsAuthenticationInterceptor(matcher, converter, manager);
     }
 
-    private @NotNull TokenAuthenticationManager getTokenAuthenticationManager(WebClient webClient,
-                                                                              ObjectMapper objectMapper,
-                                                                              AuthWebClientProperties webClientProperties) {
-        final var authenticationService = new TokenRemoteAuthenticationService(
+    @Bean
+    AuthenticationManager authenticationManager(WebClient webClient,
+                                                ObjectMapper objectMapper,
+                                                AuthWebClientProperties webClientProperties) {
+        final var service = new TokenRemoteAuthenticationService(
                 webClient,
                 objectMapper,
                 webClientProperties.getAuthPath(),
@@ -66,9 +67,6 @@ public class RemoteTokenWsAuthConfig {
                 webClientProperties.getTokenHeader(),
                 webClientProperties.getResponseUsernameField()
         );
-        return new TokenAuthenticationManager(
-                authenticationService,
-                defaultAuthorities
-        );
+        return new TokenAuthenticationManager(service, defaultAuthorities);
     }
 }

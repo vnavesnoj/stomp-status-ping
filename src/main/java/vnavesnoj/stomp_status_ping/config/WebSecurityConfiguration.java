@@ -6,13 +6,19 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
+import vnavesnoj.stomp_status_ping.config.properties.WsAuthenticationProperties;
+import vnavesnoj.stomp_status_ping.security.CookieRequestConverter;
+import vnavesnoj.stomp_status_ping.security.CookieRequestMatcher;
+import vnavesnoj.stomp_status_ping.security.filter.CookieAuthenticationFilter;
 
 import java.util.Arrays;
 
@@ -27,9 +33,16 @@ import java.util.Arrays;
 public class WebSecurityConfiguration {
 
     private final StompWebSocketProperties stompProperties;
+    private final WsAuthenticationProperties authProperties;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   AuthenticationManager tokenAuthenticationManager) throws Exception {
+        final var cookieAuthenticationFilter = new CookieAuthenticationFilter(
+                new CookieRequestMatcher(authProperties.getTokenCookie()),
+                new CookieRequestConverter(authProperties.getTokenCookie()),
+                tokenAuthenticationManager
+        );
         return http.sessionManagement(item -> item.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(item -> item
@@ -41,6 +54,7 @@ public class WebSecurityConfiguration {
                         .requestMatchers("/error").permitAll()
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 )
+                .addFilterBefore(cookieAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors(AbstractHttpConfigurer::disable)
                 .exceptionHandling(item -> item.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .build();

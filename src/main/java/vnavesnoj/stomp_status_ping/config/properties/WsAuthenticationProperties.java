@@ -18,5 +18,6 @@ public class WsAuthenticationProperties {
 
     String usernameHeader;
     String tokenHeader;
+    String tokenCookie;
     boolean local;
 }

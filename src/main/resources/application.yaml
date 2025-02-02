@@ -49,6 +49,7 @@ app:
         local: ${APP_AUTH_LOCAL:false} # if false app will use external authentication service. See: app.webclient.auth
         username-header: ${APP_AUTH_USERNAME_HEADER:username}
         token-header: ${APP_AUTH_TOKEN_HEADER:token}
+        token-cookie: token
   webclient:
     auth:
       write-timeout: 3000

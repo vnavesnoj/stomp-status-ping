@@ -84,7 +84,7 @@
     function connect() {
         const socket = new WebSocket(stompUrl);
         stompClient = Stomp.over(socket);
-        stompClient.connect(headers, onConnected, onError);
+        stompClient.connect({}, onConnected, onError);
     }
 
     function onConnected(frame) {

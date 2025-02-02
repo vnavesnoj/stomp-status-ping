@@ -47,11 +47,15 @@ public class LocalTokenWsAuthConfig {
                 properties.getTokenHeader(),
                 OneTimeTokenAuthenticationToken::unauthenticated
         );
+        final AuthenticationManager manager = authenticationManager(resourceLoader);
+        return new WsAuthenticationInterceptor(matcher, converter, manager);
+    }
+
+    @Bean AuthenticationManager authenticationManager(ResourceLoader resourceLoader) {
         final var tokenService = new TokenPropertiesAuthenticationService(TOKENS_PROPERTIES, resourceLoader);
-        final AuthenticationManager manager = new TokenAuthenticationManager(
+        return new TokenAuthenticationManager(
                 tokenService,
                 defaultAuthorities
         );
-        return new WsAuthenticationInterceptor(matcher, converter, manager);
     }
 }

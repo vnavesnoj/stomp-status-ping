@@ -51,6 +51,7 @@ public class TestStompJsClientController {
         final var splited = cookie.split("=");
         if (splited.length == 2) {
             final var cookieObj = new Cookie(splited[0], splited[1]);
+            cookieObj.setPath("/stomp");
             cookieObj.setHttpOnly(true);
             response.addCookie(cookieObj);
         }
