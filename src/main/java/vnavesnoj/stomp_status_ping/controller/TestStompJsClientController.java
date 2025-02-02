@@ -1,10 +1,13 @@
 package vnavesnoj.stomp_status_ping.controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import vnavesnoj.stomp_status_ping.config.properties.AppStompDestinationProperties;
 import vnavesnoj.stomp_status_ping.config.properties.BrokerDestinationProperties;
 
@@ -36,5 +39,21 @@ public class TestStompJsClientController {
         model.addAttribute("brokerUserStatusDestination", brokerUserStatusDestination);
         model.addAttribute("appUserStatusDestination", appUserStatusDestination);
         return "stomp-js-client";
+    }
+
+    @RequestMapping("/stomp-js-client-with-cookie")
+    public String stompJsClientWithCookie(Model model,
+                                          @RequestParam("cookie") String cookie,
+                                          HttpServletResponse response) {
+        model.addAttribute("stompUrl", stompUrl);
+        model.addAttribute("brokerUserStatusDestination", brokerUserStatusDestination);
+        model.addAttribute("appUserStatusDestination", appUserStatusDestination);
+        final var splited = cookie.split("=");
+        if (splited.length == 2) {
+            final var cookieObj = new Cookie(splited[0], splited[1]);
+            cookieObj.setHttpOnly(true);
+            response.addCookie(cookieObj);
+        }
+        return "stomp-js-client-with-cookie";
     }
 }
