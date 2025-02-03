@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +20,7 @@ import java.util.Optional;
  * @author vnavesnoj
  * @mail vnavesnoj@gmail.com
  */
+@Log4j2
 @RequiredArgsConstructor
 public class CookieAuthenticationFilter extends OncePerRequestFilter {
 
@@ -33,8 +35,11 @@ public class CookieAuthenticationFilter extends OncePerRequestFilter {
                 .map(converter::convert)
                 .map(authenticationManager::authenticate)
                 .filter(Authentication::isAuthenticated)
-                .ifPresent(authentication ->
-                        SecurityContextHolder.getContext().setAuthentication(authentication));
+                .ifPresent(authentication -> {
+                            SecurityContextHolder.getContext().setAuthentication(authentication);
+                            log.debug("User connection authenticated via cookie. {}", authentication);
+                        }
+                );
         filterChain.doFilter(request, response);
     }
 }

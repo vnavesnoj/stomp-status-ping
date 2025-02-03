@@ -6,6 +6,7 @@
 package vnavesnoj.stomp_status_ping.websocket.interceptor;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
@@ -21,6 +22,7 @@ import java.util.Optional;
  * @author vnavesnoj
  * @mail vnavesnoj@gmail.com
  */
+@Slf4j
 @RequiredArgsConstructor
 public class WsAuthenticationInterceptor extends StompConnectInterceptor {
 
@@ -39,6 +41,7 @@ public class WsAuthenticationInterceptor extends StompConnectInterceptor {
                     final var accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
                     if (accessor != null) {
                         accessor.setUser(item);
+                        log.debug("User connection authenticated via stomp header. {}", item);
                     }
                 });
     }
