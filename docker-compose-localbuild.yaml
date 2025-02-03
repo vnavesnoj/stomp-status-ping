@@ -18,7 +18,7 @@ services:
       - app_network
 
   stomp-status-ping:
-    image: stomp-status-ping:0.4.0
+    image: stomp-status-ping:0.4.1
     build:
       context: .
       dockerfile: ./Dockerfile
