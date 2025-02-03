@@ -3,6 +3,7 @@ package vnavesnoj.stomp_status_ping.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import vnavesnoj.stomp_status_ping.config.properties.StompWebSocketProperties;
 import vnavesnoj.stomp_status_ping.config.properties.WsAuthenticationProperties;
 import vnavesnoj.stomp_status_ping.security.CookieRequestConverter;
@@ -36,13 +36,7 @@ public class WebSecurityConfiguration {
     private final WsAuthenticationProperties authProperties;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   AuthenticationManager tokenAuthenticationManager) throws Exception {
-        final var cookieAuthenticationFilter = new CookieAuthenticationFilter(
-                new CookieRequestMatcher(authProperties.getTokenCookie()),
-                new CookieRequestConverter(authProperties.getTokenCookie()),
-                tokenAuthenticationManager
-        );
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.sessionManagement(item -> item.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(item -> item
@@ -54,9 +48,26 @@ public class WebSecurityConfiguration {
                         .requestMatchers("/error").permitAll()
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 )
-                .addFilterBefore(cookieAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors(AbstractHttpConfigurer::disable)
                 .exceptionHandling(item -> item.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .build();
+    }
+
+    @Bean
+    public FilterRegistrationBean<CookieAuthenticationFilter> cookieAuthFilter(AuthenticationManager tokenAuthenticationManager) {
+        final var cookieAuthenticationFilter = new CookieAuthenticationFilter(
+                new CookieRequestMatcher(authProperties.getTokenCookie()),
+                new CookieRequestConverter(authProperties.getTokenCookie()),
+                tokenAuthenticationManager
+        );
+        final var registrationBean = new FilterRegistrationBean<CookieAuthenticationFilter>();
+        registrationBean.setFilter(cookieAuthenticationFilter);
+        registrationBean.addUrlPatterns(
+                Arrays.stream(stompProperties.getEndpoints())
+                        .map(endpoint -> endpoint + "/*")
+                        .toArray(String[]::new)
+        );
+        registrationBean.setOrder(2);
+        return registrationBean;
     }
 }
